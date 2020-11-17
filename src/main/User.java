@@ -15,8 +15,5 @@ public class User {
         this.history = history;
         this.favMovie = favMovie;
     }
-
-    public int Favorite() {
-
-    }
+    
 }
