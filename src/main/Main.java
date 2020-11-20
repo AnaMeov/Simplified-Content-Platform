@@ -71,6 +71,20 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
+        for(int i = 0; i < input.getCommands().size(); i++) {
+            if(input.getCommands().get(i).getActionType() != null) {
+                if(input.getCommands().get(i).getActionType().equals(Constants.command)) {
+                    if(input.getCommands().get(i).getType().equals(Constants.favorite)) {
+
+                    } else if(input.getCommands().get(i).getType().equals(Constants.view)) {
+
+                    } else if(input.getCommands().get(i).getType().equals(Constants.rating)) {
+
+                    }
+                }
+
+            }
+        }
 
         fileWriter.closeJSON(arrayResult);
     }
