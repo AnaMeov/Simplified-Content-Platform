@@ -1,5 +1,7 @@
 package main;
 
+import fileio.UserInputData;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -34,7 +36,11 @@ public class User {
         return favoriteMovies;
     }
 
-    public void getFavorite() {
-        
+    public void addFavorite(String videoTitle) {
+        if (history.containsKey(videoTitle)) {
+            if (!favoriteMovies.contains(videoTitle)) {
+                favoriteMovies.add(videoTitle);
+            }
+        }
     }
 }

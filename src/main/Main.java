@@ -5,6 +5,7 @@ import checker.Checker;
 import common.Constants;
 import fileio.Input;
 import fileio.InputLoader;
+import fileio.UserInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -27,6 +29,7 @@ public final class Main {
 
     /**
      * Call the main checker and the coding style checker
+     *
      * @param args from command line
      * @throws IOException in case of exceptions to reading / writing
      */
@@ -71,18 +74,25 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
-        for(int i = 0; i < input.getCommands().size(); i++) {
-            if(input.getCommands().get(i).getActionType() != null) {
-                if(input.getCommands().get(i).getActionType().equals(Constants.command)) {
-                    if(input.getCommands().get(i).getType().equals(Constants.favorite)) {
 
-                    } else if(input.getCommands().get(i).getType().equals(Constants.view)) {
+        ArrayList<User> users = new ArrayList<>();
+        for (UserInputData userInputData : input.getUsers()) {
+            User user = new User(userInputData.getUsername(), userInputData.getSubscriptionType(),
+                    userInputData.getHistory(), userInputData.getFavoriteMovies());
+            users.add(user);
+        }
 
-                    } else if(input.getCommands().get(i).getType().equals(Constants.rating)) {
+        for (int i = 0; i < input.getCommands().size(); i++) {
+            if (input.getCommands().get(i).getActionType() != null) {
+                if (input.getCommands().get(i).getActionType().equals(Constants.COMMAND)) {
+                    if (input.getCommands().get(i).getType().equals(Constants.FAVORITE)) {
+                        
+                    } else if (input.getCommands().get(i).getType().equals(Constants.VIEW)) {
+
+                    } else if (input.getCommands().get(i).getType().equals(Constants.RATING)) {
 
                     }
                 }
-
             }
         }
 
