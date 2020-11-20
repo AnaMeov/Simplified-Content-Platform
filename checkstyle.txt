@@ -1,7 +1,9 @@
 Starting audit...
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:88:90: Must have at least one statement. [EmptyBlock]
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:90:93: Must have at least one statement. [EmptyBlock]
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:92:95: Must have at least one statement. [EmptyBlock]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:92:25: 'for' is not followed by whitespace. [WhitespaceAfter]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:93: Line is longer than 100 characters (found 109). [LineLength]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:93:29: 'if' is not followed by whitespace. [WhitespaceAfter]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:97:93: Must have at least one statement. [EmptyBlock]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:99:95: Must have at least one statement. [EmptyBlock]
 [ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Movie.java:15:5: Class 'Movie' looks like designed for extension (can be subclassed), but the method 'getDuration' does not have javadoc that explains how to do that safely. If class is not designed for extension consider making the class 'Movie' final or making the method 'getDuration' static/final/abstract/empty, or adding allowed annotation for the method. [DesignForExtension]
 [ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Serial.java:12:19: Parameter title should be final. [FinalParameters]
 [ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Serial.java:12:33: Parameter year should be final. [FinalParameters]
@@ -28,4 +30,4 @@ Starting audit...
 [ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:39:5: Missing a Javadoc comment. [MissingJavadocMethod]
 [ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:39:29: Parameter videoTitle should be final. [FinalParameters]
 Audit done.
-Checkstyle ends with 28 errors.
+Checkstyle ends with 30 errors.

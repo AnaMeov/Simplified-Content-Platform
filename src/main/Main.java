@@ -86,7 +86,11 @@ public final class Main {
             if (input.getCommands().get(i).getActionType() != null) {
                 if (input.getCommands().get(i).getActionType().equals(Constants.COMMAND)) {
                     if (input.getCommands().get(i).getType().equals(Constants.FAVORITE)) {
-                        
+                        for(int j = 0; j < users.size(); j++) {
+                            if(input.getCommands().get(i).getUsername().equals(users.get(j).getUsername())) {
+                                users.get(j).addFavorite(input.getCommands().get(i).getTitle());
+                            }
+                        }
                     } else if (input.getCommands().get(i).getType().equals(Constants.VIEW)) {
 
                     } else if (input.getCommands().get(i).getType().equals(Constants.RATING)) {
