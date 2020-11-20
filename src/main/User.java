@@ -33,4 +33,8 @@ public class User {
     public ArrayList<String> getFavoriteMovies() {
         return favoriteMovies;
     }
+
+    public void getFavorite() {
+        
+    }
 }
