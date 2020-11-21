@@ -3,10 +3,7 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import fileio.Input;
-import fileio.InputLoader;
-import fileio.UserInputData;
-import fileio.Writer;
+import fileio.*;
 import org.json.simple.JSONArray;
 
 import java.io.File;
@@ -75,6 +72,7 @@ public final class Main {
 
         //TODO add here the entry point to your implementation
 
+        // imi generez baza de date pentru useri
         ArrayList<User> users = new ArrayList<>();
         for (UserInputData userInputData : input.getUsers()) {
             User user = new User(userInputData.getUsername(), userInputData.getSubscriptionType(),
@@ -82,13 +80,18 @@ public final class Main {
             users.add(user);
         }
 
+
         for (int i = 0; i < input.getCommands().size(); i++) {
-            if (input.getCommands().get(i).getActionType() != null) {
-                if (input.getCommands().get(i).getActionType().equals(Constants.COMMAND)) {
-                    if (input.getCommands().get(i).getType().equals(Constants.FAVORITE)) {
-                        for(int j = 0; j < users.size(); j++) {
-                            if(input.getCommands().get(i).getUsername().equals(users.get(j).getUsername())) {
-                                users.get(j).addFavorite(input.getCommands().get(i).getTitle());
+            // variabila pentru lizibilitate
+            ActionInputData currentCommand = input.getCommands().get(i);
+
+            if (currentCommand.getActionType() != null) {
+                if (currentCommand.getActionType().equals(Constants.COMMAND)) {
+                    if (currentCommand.getType().equals(Constants.FAVORITE)) {
+                        for (int j = 0; j < users.size(); j++) {
+                            String output = users.get(j).addFavorite(currentCommand.getTitle());
+                            if (currentCommand.getUsername().equals(users.get(j).getUsername())) {
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(), null, output));
                             }
                         }
                     } else if (input.getCommands().get(i).getType().equals(Constants.VIEW)) {

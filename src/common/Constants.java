@@ -78,5 +78,9 @@ public final class Constants {
     public static final String VIEW = "view";
     public static final String FAVORITE = "favorite";
     public static final String RATING = "rating";
-
+    public static final String SUCCESS = "success -> ";
+    public static final String ERROR = "error -> ";
+    public static final String FAVORITE_SUCCESS = " was added as favourite";
+    public static final String FAVORITE_ERROR1 = " is already in favourite list";
+    public static final String FAVORITE_ERROR2 = " is not seen";
 }

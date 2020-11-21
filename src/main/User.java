@@ -1,7 +1,13 @@
 package main;
 
+import common.Constants;
+import fileio.Input;
+import fileio.InputLoader;
 import fileio.UserInputData;
+import fileio.Writer;
+import org.json.simple.JSONArray;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -36,11 +42,28 @@ public class User {
         return favoriteMovies;
     }
 
-    public void addFavorite(String videoTitle) {
-        if (history.containsKey(videoTitle)) {
-            if (!favoriteMovies.contains(videoTitle)) {
-                favoriteMovies.add(videoTitle);
+
+    public String addFavorite(String videoTitle) {
+        if (videoTitle == null) {
+            return null;
+        } else {
+            if (history.containsKey(videoTitle)) {
+                if (!favoriteMovies.contains(videoTitle)) {
+                    favoriteMovies.add(videoTitle);
+                    return Constants.SUCCESS + videoTitle + Constants.FAVORITE_SUCCESS;
+                } else {
+                    return Constants.ERROR + videoTitle + Constants.FAVORITE_ERROR1;
+                }
+            } else {
+                return Constants.ERROR + videoTitle + Constants.FAVORITE_ERROR2;
             }
         }
+    }
+
+    public String addView(String videoTitle) {
+        if (videoTitle == null) {
+            return null;
+        }
+        return null;
     }
 }
