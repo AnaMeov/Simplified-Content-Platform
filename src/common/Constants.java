@@ -82,5 +82,11 @@ public final class Constants {
     public static final String ERROR = "error -> ";
     public static final String FAVORITE_SUCCESS = " was added as favourite";
     public static final String FAVORITE_ERROR1 = " is already in favourite list";
-    public static final String FAVORITE_ERROR2 = " is not seen";
+    public static final String NOT_SEEN = " is not seen";
+    public static final String VIEW_SUCCESS = " was viewed with total views of ";
+    public static final int VIEW_CONST = 1;
+    public static final String MOVIE = "movie";
+    public static final String SERIAL = "serial";
+    public static final String RATED = " was rated with ";
+    public static final String BY = " by ";
 }

@@ -1,13 +1,6 @@
 package main;
 
 import common.Constants;
-import fileio.Input;
-import fileio.InputLoader;
-import fileio.UserInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
-
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -26,24 +19,28 @@ public class User {
         this.favoriteMovies = favoriteMovies;
     }
 
-    public String getUsername() {
+    public final String getUsername() {
         return username;
     }
 
-    public String getSubscriptionType() {
+    public final String getSubscriptionType() {
         return subscriptionType;
     }
 
-    public Map<String, Integer> getHistory() {
+    public final Map<String, Integer> getHistory() {
         return history;
     }
 
-    public ArrayList<String> getFavoriteMovies() {
+    public final ArrayList<String> getFavoriteMovies() {
         return favoriteMovies;
     }
 
 
-    public String addFavorite(String videoTitle) {
+    /** functia de video-uri favorite
+     * @param videoTitle
+     * @return
+     */
+    public final String addFavorite(String videoTitle) {
         if (videoTitle == null) {
             return null;
         } else {
@@ -55,15 +52,70 @@ public class User {
                     return Constants.ERROR + videoTitle + Constants.FAVORITE_ERROR1;
                 }
             } else {
-                return Constants.ERROR + videoTitle + Constants.FAVORITE_ERROR2;
+                return Constants.ERROR + videoTitle + Constants.NOT_SEEN;
             }
         }
     }
 
-    public String addView(String videoTitle) {
+    /** functia de video-uri vazute
+     * @param videoTitle
+     * @return
+     */
+    public final String addView(String videoTitle) {
         if (videoTitle == null) {
             return null;
+        } else {
+            if (history.containsKey(videoTitle)) {
+                history.replace(videoTitle, history.get(videoTitle) + 1);
+                return Constants.SUCCESS + videoTitle + Constants.VIEW_SUCCESS
+                        + history.get(videoTitle);
+            } else {
+                history.put(videoTitle, Constants.VIEW_CONST);
+                return Constants.SUCCESS + videoTitle + Constants.VIEW_SUCCESS
+                        + Constants.VIEW_CONST;
+            }
+        }
+    }
+
+    /** functia de adaugare de rating
+     * @param movies
+     * @param serials
+     * @param videoTitle
+     * @param rating
+     * @param username
+     * @return
+     */
+    public final String addRating(final ArrayList<Movie> movies, final ArrayList<Serial> serials,
+                                  final String videoTitle, final double rating,
+                                  final String username) {
+        if (videoTitle == null) {
+            return null;
+        } else {
+            if (history.containsKey(videoTitle)) {
+                for (Movie movie : movies) {
+                    if (movie.getTitle().equals(videoTitle)) {
+                        movie.setRating(rating);
+                        return Constants.SUCCESS + videoTitle + Constants.RATED
+                                + rating + Constants.BY + username;
+                    }
+                }
+                for (Serial serial : serials) {
+                    if (serial.getTitle().equals(videoTitle)) {
+                        for (int i = 0; i < serial.getNumberOfSeasons(); i++) {
+                            for (int j = 0; j < serial.getSeasons().get(i).getRatings().size();
+                                 j++) {
+                                serial.setRating(serial.getSeasons().get(i).getRatings().get(j));
+                            }
+                            return Constants.SUCCESS + videoTitle + Constants.RATED + rating
+                                    + Constants.BY + username;
+                        }
+                    }
+                }
+            } else {
+                return Constants.ERROR + videoTitle + Constants.NOT_SEEN;
+            }
         }
         return null;
     }
+
 }

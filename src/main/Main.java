@@ -3,7 +3,13 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import fileio.*;
+import fileio.ActionInputData;
+import fileio.SerialInputData;
+import fileio.MovieInputData;
+import fileio.Writer;
+import fileio.UserInputData;
+import fileio.Input;
+import fileio.InputLoader;
 import org.json.simple.JSONArray;
 
 import java.io.File;
@@ -75,9 +81,33 @@ public final class Main {
         // imi generez baza de date pentru useri
         ArrayList<User> users = new ArrayList<>();
         for (UserInputData userInputData : input.getUsers()) {
-            User user = new User(userInputData.getUsername(), userInputData.getSubscriptionType(),
-                    userInputData.getHistory(), userInputData.getFavoriteMovies());
+            User user = new User(userInputData.getUsername(),
+                    userInputData.getSubscriptionType(),
+                    userInputData.getHistory(),
+                    userInputData.getFavoriteMovies());
             users.add(user);
+        }
+
+        // imi generez baza de date pentru movies
+        ArrayList<Movie> movies = new ArrayList<>();
+        for (MovieInputData movieInputData : input.getMovies()) {
+            Movie movie = new Movie(movieInputData.getTitle(),
+                    movieInputData.getCast(), movieInputData.getGenres(),
+                    movieInputData.getYear(), movieInputData.getDuration());
+            movie.setType(Constants.MOVIE);
+            movies.add(movie);
+        }
+
+        // imi generez baza de date pentru serials
+        ArrayList<Serial> serials = new ArrayList<>();
+        for (SerialInputData serialInputData : input.getSerials()) {
+            Serial serial = new Serial(serialInputData.getTitle(),
+                    serialInputData.getYear(),
+                    serialInputData.getGenres(), serialInputData.getCast(),
+                    serialInputData.getNumberSeason(),
+                    serialInputData.getSeasons());
+            serial.setType(Constants.SERIAL);
+            serials.add(serial);
         }
 
 
@@ -91,18 +121,32 @@ public final class Main {
                         for (int j = 0; j < users.size(); j++) {
                             String output = users.get(j).addFavorite(currentCommand.getTitle());
                             if (currentCommand.getUsername().equals(users.get(j).getUsername())) {
-                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(), null, output));
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                        null, output));
                             }
                         }
                     } else if (input.getCommands().get(i).getType().equals(Constants.VIEW)) {
-
+                        for (int j = 0; j < users.size(); j++) {
+                            String output = users.get(j).addView(currentCommand.getTitle());
+                            if (currentCommand.getUsername().equals(users.get(j).getUsername())) {
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                        null, output));
+                            }
+                        }
                     } else if (input.getCommands().get(i).getType().equals(Constants.RATING)) {
-
+                        for (int j = 0; j < users.size(); j++) {
+                            String output = users.get(j).addRating(movies, serials,
+                                    currentCommand.getTitle(), currentCommand.getGrade(),
+                                    currentCommand.getUsername());
+                            if (currentCommand.getUsername().equals(users.get(j).getUsername())) {
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                        null, output));
+                            }
+                        }
                     }
                 }
             }
         }
-
         fileWriter.closeJSON(arrayResult);
     }
 }

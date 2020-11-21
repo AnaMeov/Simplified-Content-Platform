@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Movie extends Show {
 
     private final int duration;
+    private double rating;
+
     public Movie(final String title, final ArrayList<String> cast,
                  final ArrayList<String> genres, final int year,
                  final int duration) {
@@ -12,7 +14,15 @@ public class Movie extends Show {
         this.duration = duration;
     }
 
-    public int getDuration() {
+    public final int getDuration() {
         return duration;
+    }
+
+    public final double getRating() {
+        return rating;
+    }
+
+    public final void setRating(double rating) {
+        this.rating = rating;
     }
 }

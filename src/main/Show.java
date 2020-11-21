@@ -7,29 +7,38 @@ public class Show {
     private final int year;
     private final ArrayList<String> cast;
     private final ArrayList<String> genres;
+    private String type;
 
-    public Show(String title, int year, ArrayList<String> cast, ArrayList<String> genres) {
+    public Show(final String title, final int year, final ArrayList<String> cast,
+                final ArrayList<String> genres) {
         this.title = title;
         this.year = year;
         this.cast = cast;
         this.genres = genres;
     }
 
-    public String getTitle() {
+    public final String getTitle() {
         return title;
     }
 
-    public int getYear() {
+    public final int getYear() {
         return year;
     }
 
-    public ArrayList<String> getCast() {
+    public final ArrayList<String> getCast() {
         return cast;
     }
 
-    public ArrayList<String> getGenres() {
+    public final ArrayList<String> getGenres() {
         return genres;
     }
 
+    public final String getType() {
+        return type;
+    }
+
+    public final void setType(String type) {
+        this.type = type;
+    }
 
 }
