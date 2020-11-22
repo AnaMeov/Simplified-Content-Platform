@@ -4,6 +4,7 @@ import common.Constants;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 
 public class User {
@@ -12,6 +13,9 @@ public class User {
     private final Map<String, Integer> history;
     private final ArrayList<String> favoriteMovies;
     private int numberRatings = 0;
+    private Map<String, Integer> viewsShow;
+    private Map<String, Double> ratedVideos = new HashMap<>();
+
 
     public User(final String username, final String subscriptionType,
                 final Map<String, Integer> history,
@@ -42,6 +46,9 @@ public class User {
         return numberRatings;
     }
 
+    public Map<String, Integer> getViewsShow() {
+        return viewsShow;
+    }
 
     public static Comparator<User> getCompByRating() {
         return new Comparator<User>() {
@@ -110,12 +117,12 @@ public class User {
      * @param serials
      * @param videoTitle
      * @param rating
-     * @param username
+     * @param userName
      * @return
      */
     public final String addRating(final ArrayList<Movie> movies, final ArrayList<Serial> serials,
-                                  final String videoTitle, final double rating,
-                                  final String username) {
+                                  String videoTitle, final double rating,
+                                  final String userName, int season) {
         if (videoTitle == null) {
             return null;
         } else {
@@ -145,7 +152,12 @@ public class User {
                 return Constants.ERROR + videoTitle + Constants.NOT_SEEN;
             }
         }
-        return null;
+        return Constants.ERROR + videoTitle + Constants.NOT_SEEN;
+
     }
 
+    @Override
+    public String toString() {
+        return username;
+    }
 }

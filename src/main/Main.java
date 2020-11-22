@@ -118,38 +118,43 @@ public final class Main {
             if (currentCommand.getActionType() != null) {
                 if (currentCommand.getActionType().equals(Constants.COMMAND)) {
                     if (currentCommand.getType().equals(Constants.FAVORITE)) {
-                        for (int j = 0; j < users.size(); j++) {
-                            String output = users.get(j).addFavorite(currentCommand.getTitle());
-                            if (currentCommand.getUsername().equals(users.get(j).getUsername())) {
+                        for (User user : users) {
+                            if (currentCommand.getUsername().equals(user.getUsername())) {
+                                String output = user.addFavorite(currentCommand.getTitle());
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }
                         }
                     } else if (input.getCommands().get(i).getType().equals(Constants.VIEW)) {
-                        for (int j = 0; j < users.size(); j++) {
-                            String output = users.get(j).addView(currentCommand.getTitle());
-                            if (currentCommand.getUsername().equals(users.get(j).getUsername())) {
+                        for (User user : users) {
+                            if (currentCommand.getUsername().equals(user.getUsername())) {
+                            String output = user.addView(currentCommand.getTitle());
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }
                         }
                     } else if (input.getCommands().get(i).getType().equals(Constants.RATING)) {
-                        for (int j = 0; j < users.size(); j++) {
-                            String output = users.get(j).addRating(movies, serials,
+                        for (User user : users) {
+                            if (currentCommand.getUsername().equals(user.getUsername())) {
+                                String output = user.addRating(movies, serials,
                                     currentCommand.getTitle(), currentCommand.getGrade(),
-                                    currentCommand.getUsername());
-                            if (currentCommand.getUsername().equals(users.get(j).getUsername())) {
+                                    currentCommand.getUsername(), currentCommand.getSeasonNumber());
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }
+
                         }
                     }
                 }
                 if (currentCommand.getActionType().equals(Constants.QUERY)) {
-                    String output = Query.ratingsNumber(currentCommand.getNumber(),
+                    if(currentCommand.getCriteria().equals(Constants.NUM_RATINGS)) {
+                        String output = Query.ratingsNumber(currentCommand.getNumber(),
                                 currentCommand.getSortType(), users);
-                    arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
-                                    null, output));
+                        arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                null, output));
+                    } else if(currentCommand.getCriteria().equals(Constants.MOST_VIEWED)) {
+
+                   }
                 }
             }
         }

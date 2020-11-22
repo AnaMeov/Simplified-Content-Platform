@@ -1,4 +1,15 @@
 Starting audit...
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:118:48: 'username' hides a field. [HiddenField]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:150:21: 'if' is not followed by whitespace. [WhitespaceAfter]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:155:28: 'if' is not followed by whitespace. [WhitespaceAfter]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Main.java:155:91: Must have at least one statement. [EmptyBlock]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Query.java:26: Line is longer than 100 characters (found 106). [LineLength]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Query.java:40:5: Missing a Javadoc comment. [MissingJavadocMethod]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Query.java:40:53: ',' is not followed by whitespace. [WhitespaceAfter]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Query.java:43:9: 'for' is not followed by whitespace. [WhitespaceAfter]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Query.java:43:41: Must have at least one statement. [EmptyBlock]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:49:5: Class 'User' looks like designed for extension (can be subclassed), but the method 'getViewsShow' does not have javadoc that explains how to do that safely. If class is not designed for extension consider making the class 'User' final or making the method 'getViewsShow' static/final/abstract/empty, or adding allowed annotation for the method. [DesignForExtension]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:124:35: Parameter videoTitle should be final. [FinalParameters]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:125:58: Parameter season should be final. [FinalParameters]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:159:5: Class 'User' looks like designed for extension (can be subclassed), but the method 'toString' does not have javadoc that explains how to do that safely. If class is not designed for extension consider making the class 'User' final or making the method 'toString' static/final/abstract/empty, or adding allowed annotation for the method. [DesignForExtension]
 Audit done.
-Checkstyle ends with 1 errors.
+Checkstyle ends with 12 errors.
