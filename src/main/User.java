@@ -1,7 +1,9 @@
 package main;
 
 import common.Constants;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 
 public class User {
@@ -9,6 +11,7 @@ public class User {
     private final String subscriptionType;
     private final Map<String, Integer> history;
     private final ArrayList<String> favoriteMovies;
+    private int numberRatings = 0;
 
     public User(final String username, final String subscriptionType,
                 final Map<String, Integer> history,
@@ -35,12 +38,33 @@ public class User {
         return favoriteMovies;
     }
 
+    public final int getNumberRatings() {
+        return numberRatings;
+    }
 
-    /** functia de video-uri favorite
+
+    public static Comparator<User> getCompByRating() {
+        return new Comparator<User>() {
+            @Override
+            public int compare(final User u1, final User u2) {
+                if (u1.getNumberRatings() < u2.getNumberRatings()) {
+                    return -1;
+                } else if (u1.getNumberRatings() > u2.getNumberRatings()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+    }
+
+    /**
+     * functia de video-uri favorite
+     *
      * @param videoTitle
      * @return
      */
-    public final String addFavorite(String videoTitle) {
+    public final String addFavorite(final String videoTitle) {
         if (videoTitle == null) {
             return null;
         } else {
@@ -57,11 +81,13 @@ public class User {
         }
     }
 
-    /** functia de video-uri vazute
+    /**
+     * functia de video-uri vazute
+     *
      * @param videoTitle
      * @return
      */
-    public final String addView(String videoTitle) {
+    public final String addView(final String videoTitle) {
         if (videoTitle == null) {
             return null;
         } else {
@@ -77,7 +103,9 @@ public class User {
         }
     }
 
-    /** functia de adaugare de rating
+    /**
+     * functia de adaugare de rating
+     *
      * @param movies
      * @param serials
      * @param videoTitle
@@ -95,6 +123,7 @@ public class User {
                 for (Movie movie : movies) {
                     if (movie.getTitle().equals(videoTitle)) {
                         movie.setRating(rating);
+                        numberRatings++;
                         return Constants.SUCCESS + videoTitle + Constants.RATED
                                 + rating + Constants.BY + username;
                     }
@@ -106,6 +135,7 @@ public class User {
                                  j++) {
                                 serial.setRating(serial.getSeasons().get(i).getRatings().get(j));
                             }
+                            numberRatings++;
                             return Constants.SUCCESS + videoTitle + Constants.RATED + rating
                                     + Constants.BY + username;
                         }

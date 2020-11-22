@@ -1,9 +1,4 @@
 Starting audit...
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Movie.java:25:33: Parameter rating should be final. [FinalParameters]
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Serial.java:34:33: Parameter rating should be final. [FinalParameters]
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\Show.java:40:31: Parameter type should be final. [FinalParameters]
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:43:37: Parameter videoTitle should be final. [FinalParameters]
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:64:33: Parameter videoTitle should be final. [FinalParameters]
-[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:90:48: 'username' hides a field. [HiddenField]
+[ERROR] C:\Users\ana_m\Desktop\tema1\Tema-POO-2020\.\src\main\User.java:118:48: 'username' hides a field. [HiddenField]
 Audit done.
-Checkstyle ends with 6 errors.
+Checkstyle ends with 1 errors.

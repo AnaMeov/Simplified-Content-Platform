@@ -37,7 +37,7 @@ public class Show {
         return type;
     }
 
-    public final void setType(String type) {
+    public final void setType(final String type) {
         this.type = type;
     }
 

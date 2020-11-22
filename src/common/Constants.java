@@ -89,4 +89,7 @@ public final class Constants {
     public static final String SERIAL = "serial";
     public static final String RATED = " was rated with ";
     public static final String BY = " by ";
+    public static final String ASC = "asc";
+    public static final String DSC = "dsc";
+    public static final String QUERY_RES = "Query result: ";
 }

@@ -22,7 +22,7 @@ public class Movie extends Show {
         return rating;
     }
 
-    public final void setRating(double rating) {
+    public final void setRating(final double rating) {
         this.rating = rating;
     }
 }

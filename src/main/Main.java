@@ -145,6 +145,12 @@ public final class Main {
                         }
                     }
                 }
+                if (currentCommand.getActionType().equals(Constants.QUERY)) {
+                    String output = Query.ratingsNumber(currentCommand.getNumber(),
+                                currentCommand.getSortType(), users);
+                    arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output));
+                }
             }
         }
         fileWriter.closeJSON(arrayResult);
