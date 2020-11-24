@@ -3,13 +3,7 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import fileio.ActionInputData;
-import fileio.SerialInputData;
-import fileio.MovieInputData;
-import fileio.Writer;
-import fileio.UserInputData;
-import fileio.Input;
-import fileio.InputLoader;
+import fileio.*;
 import org.json.simple.JSONArray;
 
 import java.io.File;
@@ -112,6 +106,7 @@ public final class Main {
 
 
         for (int i = 0; i < input.getCommands().size(); i++) {
+
             // variabila pentru lizibilitate
             ActionInputData currentCommand = input.getCommands().get(i);
 
@@ -138,22 +133,25 @@ public final class Main {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
                                 String output = user.addRating(movies, serials,
                                     currentCommand.getTitle(), currentCommand.getGrade(),
-                                    currentCommand.getUsername(), currentCommand.getSeasonNumber());
+                                        currentCommand.getSeasonNumber());
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }
-
                         }
                     }
                 }
+
                 if (currentCommand.getActionType().equals(Constants.QUERY)) {
                     if(currentCommand.getCriteria().equals(Constants.NUM_RATINGS)) {
-                        String output = Query.ratingsNumber(currentCommand.getNumber(),
-                                currentCommand.getSortType(), users);
+                        String output = User.ratingsNumber(currentCommand.getSortType(),
+                                currentCommand.getNumber(), users);
                         arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                 null, output));
                     } else if(currentCommand.getCriteria().equals(Constants.MOST_VIEWED)) {
-
+                        String output = Movie.mostViewed(currentCommand, movies, users);
+                        arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                null, output));
+                        System.out.println(output);
                    }
                 }
             }

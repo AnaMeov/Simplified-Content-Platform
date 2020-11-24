@@ -13,8 +13,8 @@ public class User {
     private final Map<String, Integer> history;
     private final ArrayList<String> favoriteMovies;
     private int numberRatings = 0;
-    private Map<String, Integer> viewsShow;
-    private Map<String, Double> ratedVideos = new HashMap<>();
+    private final Map<String, Double> ratingMovie = new HashMap<>();
+    private final Map<String, ArrayList<Integer>> ratingSerial = new HashMap<>();
 
 
     public User(final String username, final String subscriptionType,
@@ -46,21 +46,11 @@ public class User {
         return numberRatings;
     }
 
-    public Map<String, Integer> getViewsShow() {
-        return viewsShow;
-    }
-
-    public static Comparator<User> getCompByRating() {
+    public static Comparator<User> getcompByUser() {
         return new Comparator<User>() {
             @Override
-            public int compare(final User u1, final User u2) {
-                if (u1.getNumberRatings() < u2.getNumberRatings()) {
-                    return -1;
-                } else if (u1.getNumberRatings() > u2.getNumberRatings()) {
-                    return 1;
-                } else {
-                    return 0;
-                }
+            public int compare(User u1, User u2) {
+                return Double.compare(u1.getNumberRatings(), u2.getNumberRatings());
             }
         };
     }
@@ -111,37 +101,41 @@ public class User {
     }
 
     /**
-     * functia de adaugare de rating
-     *
      * @param movies
      * @param serials
      * @param videoTitle
      * @param rating
-     * @param userName
+     * @param season
      * @return
      */
     public final String addRating(final ArrayList<Movie> movies, final ArrayList<Serial> serials,
-                                  String videoTitle, final double rating,
-                                  final String userName, int season) {
+                                  String videoTitle, final double rating, final int season) {
         if (videoTitle == null) {
             return null;
         } else {
             if (history.containsKey(videoTitle)) {
                 for (Movie movie : movies) {
                     if (movie.getTitle().equals(videoTitle)) {
-                        movie.setRating(rating);
-                        numberRatings++;
-                        return Constants.SUCCESS + videoTitle + Constants.RATED
-                                + rating + Constants.BY + username;
+                        if (ratingMovie.get(movie.getTitle()) == null) {
+                            ratingMovie.put(movie.getTitle(), movie.getRating());
+                            movie.setRating(rating);
+                            numberRatings++;
+                            return Constants.SUCCESS + videoTitle + Constants.RATED
+                                    + rating + Constants.BY + username;
+                        } else {
+                            return Constants.ERROR + videoTitle + Constants.AL_RATED;
+                        }
                     }
                 }
                 for (Serial serial : serials) {
                     if (serial.getTitle().equals(videoTitle)) {
-                        for (int i = 0; i < serial.getNumberOfSeasons(); i++) {
-                            for (int j = 0; j < serial.getSeasons().get(i).getRatings().size();
-                                 j++) {
-                                serial.setRating(serial.getSeasons().get(i).getRatings().get(j));
-                            }
+                        ratingSerial.computeIfAbsent(videoTitle, k -> new ArrayList<>());
+                        if (ratingSerial.get(videoTitle).contains(season)) {
+                            return Constants.ERROR + videoTitle + Constants.AL_RATED;
+                        } else {
+                            ArrayList<Integer> seasonBuff = ratingSerial.get(videoTitle);
+                            seasonBuff.add(season);
+                            ratingSerial.put(videoTitle, seasonBuff);
                             numberRatings++;
                             return Constants.SUCCESS + videoTitle + Constants.RATED + rating
                                     + Constants.BY + username;
@@ -153,7 +147,31 @@ public class User {
             }
         }
         return Constants.ERROR + videoTitle + Constants.NOT_SEEN;
+    }
 
+    /**
+     * @param sortType
+     * @param number
+     * @param users
+     * @return
+     */
+    public static String ratingsNumber(String sortType, final int number, final ArrayList<User> users) {
+        ArrayList<User> usersBuff = new ArrayList<>();
+        if (sortType.equals(Constants.ASC)) {
+            users.sort(getcompByUser());
+        } else {
+            users.sort(getcompByUser().reversed());
+        }
+        for (int i = 0; i < number; i++) {
+            if (i == users.size()) {
+                break;
+            }
+            if (users.get(i).getNumberRatings() == 0) {
+                continue;
+            }
+            usersBuff.add(users.get(i));
+        }
+        return Constants.QUERY_RES + usersBuff.toString();
     }
 
     @Override

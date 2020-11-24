@@ -90,8 +90,9 @@ public final class Constants {
     public static final String RATED = " was rated with ";
     public static final String BY = " by ";
     public static final String ASC = "asc";
-    public static final String DSC = "dsc";
+    public static final String DSC = "desc";
     public static final String QUERY_RES = "Query result: ";
     public static final String MOST_VIEWED = "most_viewed";
     public static final String RATINGS = "ratings";
+    public static final String AL_RATED = " is already rated";
 }

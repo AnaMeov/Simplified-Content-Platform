@@ -3,6 +3,7 @@ package main;
 import entertainment.Season;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Serial extends Show {
 
@@ -34,4 +35,7 @@ public class Serial extends Show {
     public final void setRating(final double rating) {
         this.rating = rating;
     }
+
+
+
 }
