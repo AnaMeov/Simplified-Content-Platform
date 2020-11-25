@@ -2,7 +2,7 @@ package common;
 
 /**
  * The class contains the minimum of constants needed.
- *
+ * <p>
  * You can define your own constants here or create separate files.
  */
 public final class Constants {
@@ -95,4 +95,5 @@ public final class Constants {
     public static final String MOST_VIEWED = "most_viewed";
     public static final String RATINGS = "ratings";
     public static final String AL_RATED = " is already rated";
+    public static final String LONGEST = "longest";
 }

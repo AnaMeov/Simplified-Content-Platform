@@ -3,7 +3,13 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import fileio.*;
+import fileio.ActionInputData;
+import fileio.Input;
+import fileio.InputLoader;
+import fileio.MovieInputData;
+import fileio.SerialInputData;
+import fileio.UserInputData;
+import fileio.Writer;
 import org.json.simple.JSONArray;
 
 import java.io.File;
@@ -123,7 +129,7 @@ public final class Main {
                     } else if (input.getCommands().get(i).getType().equals(Constants.VIEW)) {
                         for (User user : users) {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
-                            String output = user.addView(currentCommand.getTitle());
+                                String output = user.addView(currentCommand.getTitle());
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }
@@ -132,7 +138,7 @@ public final class Main {
                         for (User user : users) {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
                                 String output = user.addRating(movies, serials,
-                                    currentCommand.getTitle(), currentCommand.getGrade(),
+                                        currentCommand.getTitle(), currentCommand.getGrade(),
                                         currentCommand.getSeasonNumber());
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
@@ -142,17 +148,36 @@ public final class Main {
                 }
 
                 if (currentCommand.getActionType().equals(Constants.QUERY)) {
-                    if(currentCommand.getCriteria().equals(Constants.NUM_RATINGS)) {
+                    if (currentCommand.getCriteria().equals(Constants.NUM_RATINGS)) {
                         String output = User.ratingsNumber(currentCommand.getSortType(),
                                 currentCommand.getNumber(), users);
                         arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                 null, output));
-                    } else if(currentCommand.getCriteria().equals(Constants.MOST_VIEWED)) {
-                        String output = Movie.mostViewed(currentCommand, movies, users);
+                    } else if (currentCommand.getCriteria().equals(Constants.MOST_VIEWED)) {
+                        String output1 = Movie.mostViewed(currentCommand, movies, users);
+                        String output2 = Serial.mostViewed(currentCommand, serials, users);
+                        if (currentCommand.getObjectType().equals(Constants.MOVIES)) {
+                            arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output1));
+                        } else {
+                            arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output2));
+                        }
+                    } else if (currentCommand.getCriteria().equals(Constants.LONGEST)) {
+                        String output = Movie.longestMovies(currentCommand, movies);
                         arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                 null, output));
-                        System.out.println(output);
-                   }
+                    } else if (currentCommand.getCriteria().equals(Constants.FAVORITE)) {
+                        String output1 = Movie.favoriteMovies(currentCommand, movies, users);
+                        String output2 = Serial.favoriteSerials(currentCommand, serials, users);
+                        if (currentCommand.getObjectType().equals(Constants.MOVIES)) {
+                            arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output1));
+                        } else {
+                            arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output2));
+                        }
+                    }
                 }
             }
         }

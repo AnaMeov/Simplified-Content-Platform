@@ -3,15 +3,16 @@ package main;
 import common.Constants;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Collections;
 
 public class User {
     private final String username;
     private final String subscriptionType;
     private final Map<String, Integer> history;
-    private final ArrayList<String> favoriteMovies;
+    private final ArrayList<String> favoriteShows;
     private int numberRatings = 0;
     private final Map<String, Double> ratingMovie = new HashMap<>();
     private final Map<String, ArrayList<Integer>> ratingSerial = new HashMap<>();
@@ -19,11 +20,11 @@ public class User {
 
     public User(final String username, final String subscriptionType,
                 final Map<String, Integer> history,
-                final ArrayList<String> favoriteMovies) {
+                final ArrayList<String> favoriteShows) {
         this.username = username;
         this.subscriptionType = subscriptionType;
         this.history = history;
-        this.favoriteMovies = favoriteMovies;
+        this.favoriteShows = favoriteShows;
     }
 
     public final String getUsername() {
@@ -39,17 +40,20 @@ public class User {
     }
 
     public final ArrayList<String> getFavoriteMovies() {
-        return favoriteMovies;
+        return favoriteShows;
     }
 
     public final int getNumberRatings() {
         return numberRatings;
     }
 
+    /**
+     * @return
+     */
     public static Comparator<User> getcompByUser() {
         return new Comparator<User>() {
             @Override
-            public int compare(User u1, User u2) {
+            public int compare(final User u1, final User u2) {
                 return Double.compare(u1.getNumberRatings(), u2.getNumberRatings());
             }
         };
@@ -66,8 +70,8 @@ public class User {
             return null;
         } else {
             if (history.containsKey(videoTitle)) {
-                if (!favoriteMovies.contains(videoTitle)) {
-                    favoriteMovies.add(videoTitle);
+                if (!favoriteShows.contains(videoTitle)) {
+                    favoriteShows.add(videoTitle);
                     return Constants.SUCCESS + videoTitle + Constants.FAVORITE_SUCCESS;
                 } else {
                     return Constants.ERROR + videoTitle + Constants.FAVORITE_ERROR1;
@@ -109,7 +113,8 @@ public class User {
      * @return
      */
     public final String addRating(final ArrayList<Movie> movies, final ArrayList<Serial> serials,
-                                  String videoTitle, final double rating, final int season) {
+                                  final String videoTitle, final double rating,
+                                  final int season) {
         if (videoTitle == null) {
             return null;
         } else {
@@ -155,13 +160,9 @@ public class User {
      * @param users
      * @return
      */
-    public static String ratingsNumber(String sortType, final int number, final ArrayList<User> users) {
+    public static String ratingsNumber(final String sortType, final int number,
+                                       final ArrayList<User> users) {
         ArrayList<User> usersBuff = new ArrayList<>();
-        if (sortType.equals(Constants.ASC)) {
-            users.sort(getcompByUser());
-        } else {
-            users.sort(getcompByUser().reversed());
-        }
         for (int i = 0; i < number; i++) {
             if (i == users.size()) {
                 break;
@@ -171,11 +172,16 @@ public class User {
             }
             usersBuff.add(users.get(i));
         }
+        if (sortType.equals(Constants.ASC)) {
+            usersBuff.sort(getcompByUser());
+        } else {
+            Collections.reverse(usersBuff);
+        }
         return Constants.QUERY_RES + usersBuff.toString();
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return username;
     }
 }
