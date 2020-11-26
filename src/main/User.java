@@ -163,14 +163,11 @@ public class User {
     public static String ratingsNumber(final String sortType, final int number,
                                        final ArrayList<User> users) {
         ArrayList<User> usersBuff = new ArrayList<>();
-        for (int i = 0; i < number; i++) {
-            if (i == users.size()) {
-                break;
+        for (int i = 0, j = 0; i < users.size() && j < number; i++) {
+            if (users.get(i).getNumberRatings() != 0) {
+                usersBuff.add(users.get(i));
+                j++;
             }
-            if (users.get(i).getNumberRatings() == 0) {
-                continue;
-            }
-            usersBuff.add(users.get(i));
         }
         if (sortType.equals(Constants.ASC)) {
             usersBuff.sort(getcompByUser());

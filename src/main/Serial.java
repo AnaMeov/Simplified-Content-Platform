@@ -4,7 +4,11 @@ import common.Constants;
 import entertainment.Season;
 import fileio.ActionInputData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Collections;
 
 public class Serial extends Show {
 
@@ -13,7 +17,14 @@ public class Serial extends Show {
     private double rating;
     private static HashMap<String, Integer> favoriteSerials = new HashMap<>();
 
-
+    /**
+     * @param title
+     * @param year
+     * @param genres
+     * @param cast
+     * @param numberOfSeasons
+     * @param seasons
+     */
     public Serial(final String title, final int year, final ArrayList<String> genres,
                   final ArrayList<String> cast, final int numberOfSeasons,
                   final ArrayList<Season> seasons) {
@@ -113,12 +124,12 @@ public class Serial extends Show {
      * @return
      */
     public static String favoriteSerials(final ActionInputData currentCommand,
-                                        final ArrayList<Serial> serials,
-                                        final ArrayList<User> users) {
+                                         final ArrayList<Serial> serials,
+                                         final ArrayList<User> users) {
         ArrayList<Serial> serialsBuff = new ArrayList<>(serials);
         ArrayList<String> serialList = new ArrayList<>();
 
-        for(Serial serial : serials) {
+        for (Serial serial : serials) {
             favoriteSerials.put(serial.getTitle(), 0);
         }
         for (User user : users) {
@@ -150,7 +161,7 @@ public class Serial extends Show {
             Collections.reverse(serialsBuff);
         }
         for (int i = 0, j = 0; i < serialsBuff.size() && j < currentCommand.getNumber(); i++) {
-            if(favoriteSerials.containsKey(serialsBuff.get(i).getTitle())) {
+            if (favoriteSerials.containsKey(serialsBuff.get(i).getTitle())) {
                 if (favoriteSerials.get(serialsBuff.get(i).getTitle()) != 0) {
                     j++;
                     serialList.add(serialsBuff.get(i).getTitle());

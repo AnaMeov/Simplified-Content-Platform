@@ -3,13 +3,7 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import fileio.ActionInputData;
-import fileio.Input;
-import fileio.InputLoader;
-import fileio.MovieInputData;
-import fileio.SerialInputData;
-import fileio.UserInputData;
-import fileio.Writer;
+import fileio.*;
 import org.json.simple.JSONArray;
 
 import java.io.File;
@@ -110,6 +104,15 @@ public final class Main {
             serials.add(serial);
         }
 
+        // imi generez baza de date pentru actori
+        ArrayList<Actor> actors = new ArrayList<>();
+        for(ActorInputData actorInputData : input.getActors()) {
+            Actor actor = new Actor(actorInputData.getName(),
+                    actorInputData.getCareerDescription(),
+                    actorInputData.getFilmography(),
+                    actorInputData.getAwards());
+            actors.add(actor);
+        }
 
         for (int i = 0; i < input.getCommands().size(); i++) {
 
@@ -177,6 +180,12 @@ public final class Main {
                             arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                     null, output2));
                         }
+                    } else if (currentCommand.getCriteria().equals(Constants.RATINGS)) {
+                        String output1 = Movie.ratingMovies(currentCommand, movies);
+                        //String output2 = Serial.ratingSerials(currentCommand, serials, users);
+                        arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output1));
+                        System.out.println(output1);
                     }
                 }
             }
