@@ -51,6 +51,8 @@ public final class Season {
                 + currentSeason
                 + ", duration="
                 + duration
+                + " ratings + "
+                + ratings
                 + '}';
     }
 }

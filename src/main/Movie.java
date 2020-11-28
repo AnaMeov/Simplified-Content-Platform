@@ -13,7 +13,6 @@ public class Movie extends Show {
 
     private final int duration;
     private double rating;
-    private static HashMap<String, Integer> favoriteMovies = new HashMap<>();
 
     public Movie(final String title, final ArrayList<String> cast,
                  final ArrayList<String> genres, final int year,
@@ -92,14 +91,18 @@ public class Movie extends Show {
             }
         }
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
-            if (!Integer.toString(moviesBuff.get(i).getYear()).
-                    equals(currentCommand.getFilters().get(0).get(0))) {
-                moviesBuff.remove(i);
-                continue;
+            if (currentCommand.getFilters().get(0).get(0) != null) {
+                if (!Integer.toString(moviesBuff.get(i).getYear()).
+                        equals(currentCommand.getFilters().get(0).get(0))) {
+                    moviesBuff.remove(i);
+                    continue;
+                }
             }
-            if (!moviesBuff.get(i).getGenres().
-                    contains(currentCommand.getFilters().get(1).get(0))) {
-                moviesBuff.remove(i);
+            if (currentCommand.getFilters().get(1).get(0) != null) {
+                if (!moviesBuff.get(i).getGenres().
+                        contains(currentCommand.getFilters().get(1).get(0))) {
+                    moviesBuff.remove(i);
+                }
             }
         }
         moviesBuff.sort(getCompByInt(viewsMovie));
@@ -129,14 +132,18 @@ public class Movie extends Show {
             longMovie.put(movie.getTitle(), movie.getDuration());
         }
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
-            if (!Integer.toString(moviesBuff.get(i).getYear()).
-                    equals(currentCommand.getFilters().get(0).get(0))) {
-                moviesBuff.remove(i);
-                continue;
+            if (currentCommand.getFilters().get(0).get(0) != null) {
+                if (!Integer.toString(moviesBuff.get(i).getYear()).
+                        equals(currentCommand.getFilters().get(0).get(0))) {
+                    moviesBuff.remove(i);
+                    continue;
+                }
             }
-            if (!moviesBuff.get(i).getGenres().
-                    contains(currentCommand.getFilters().get(1).get(0))) {
-                moviesBuff.remove(i);
+            if (currentCommand.getFilters().get(1).get(0) != null) {
+                if (!moviesBuff.get(i).getGenres().
+                        contains(currentCommand.getFilters().get(1).get(0))) {
+                    moviesBuff.remove(i);
+                }
             }
         }
         moviesBuff.sort(getCompByInt(longMovie));
@@ -162,6 +169,7 @@ public class Movie extends Show {
     public static String favoriteMovies(final ActionInputData currentCommand,
                                         final ArrayList<Movie> movies,
                                         final ArrayList<User> users) {
+        HashMap<String, Integer> favoriteMovies = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<String> moviesList = new ArrayList<>();
         for (User user : users) {
@@ -178,14 +186,18 @@ public class Movie extends Show {
             }
         }
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
-            if (!Integer.toString(moviesBuff.get(i).getYear()).
-                    equals(currentCommand.getFilters().get(0).get(0))) {
-                moviesBuff.remove(i);
-                continue;
+            if (currentCommand.getFilters().get(0).get(0) != null) {
+                if (!Integer.toString(moviesBuff.get(i).getYear()).
+                        equals(currentCommand.getFilters().get(0).get(0))) {
+                    moviesBuff.remove(i);
+                    continue;
+                }
             }
-            if (!moviesBuff.get(i).getGenres().
-                    contains(currentCommand.getFilters().get(1).get(0))) {
-                moviesBuff.remove(i);
+            if (currentCommand.getFilters().get(1).get(0) != null) {
+                if (!moviesBuff.get(i).getGenres().
+                        contains(currentCommand.getFilters().get(1).get(0))) {
+                    moviesBuff.remove(i);
+                }
             }
         }
         moviesBuff.sort(getCompByInt(favoriteMovies));
@@ -202,7 +214,7 @@ public class Movie extends Show {
     }
 
     public static String ratingMovies(final ActionInputData currentCommand,
-                                       final ArrayList<Movie> movies) {
+                                      final ArrayList<Movie> movies) {
         HashMap<String, Double> ratingMovie = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<String> moviesList = new ArrayList<>();
@@ -210,14 +222,18 @@ public class Movie extends Show {
             ratingMovie.put(movie.getTitle(), movie.getRating());
         }
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
-            if (!Integer.toString(moviesBuff.get(i).getYear()).
-                    equals(currentCommand.getFilters().get(0).get(0))) {
-                moviesBuff.remove(i);
-                continue;
+            if (currentCommand.getFilters().get(0).get(0) != null) {
+                if (!Integer.toString(moviesBuff.get(i).getYear()).
+                        equals(currentCommand.getFilters().get(0).get(0))) {
+                    moviesBuff.remove(i);
+                    continue;
+                }
             }
-            if (!moviesBuff.get(i).getGenres().
-                    contains(currentCommand.getFilters().get(1).get(0))) {
-                moviesBuff.remove(i);
+            if (currentCommand.getFilters().get(1).get(0) != null) {
+                if (!moviesBuff.get(i).getGenres().
+                        contains(currentCommand.getFilters().get(1).get(0))) {
+                    moviesBuff.remove(i);
+                }
             }
         }
         moviesBuff.sort(getCompByDouble(ratingMovie));

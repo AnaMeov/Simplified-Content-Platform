@@ -141,6 +141,7 @@ public class User {
                             ArrayList<Integer> seasonBuff = ratingSerial.get(videoTitle);
                             seasonBuff.add(season);
                             ratingSerial.put(videoTitle, seasonBuff);
+                            serial.getSeasons().get(season - 1).getRatings().add(rating);
                             numberRatings++;
                             return Constants.SUCCESS + videoTitle + Constants.RATED + rating
                                     + Constants.BY + username;

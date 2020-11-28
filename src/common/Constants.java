@@ -94,6 +94,7 @@ public final class Constants {
     public static final String QUERY_RES = "Query result: ";
     public static final String MOST_VIEWED = "most_viewed";
     public static final String RATINGS = "ratings";
-    public static final String AL_RATED = " is already rated";
+    public static final String AL_RATED = " has been already rated";
     public static final String LONGEST = "longest";
+    public static final String AVERAGE = "average";
 }

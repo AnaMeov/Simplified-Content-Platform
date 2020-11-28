@@ -106,7 +106,7 @@ public final class Main {
 
         // imi generez baza de date pentru actori
         ArrayList<Actor> actors = new ArrayList<>();
-        for(ActorInputData actorInputData : input.getActors()) {
+        for (ActorInputData actorInputData : input.getActors()) {
             Actor actor = new Actor(actorInputData.getName(),
                     actorInputData.getCareerDescription(),
                     actorInputData.getFilmography(),
@@ -149,7 +149,6 @@ public final class Main {
                         }
                     }
                 }
-
                 if (currentCommand.getActionType().equals(Constants.QUERY)) {
                     if (currentCommand.getCriteria().equals(Constants.NUM_RATINGS)) {
                         String output = User.ratingsNumber(currentCommand.getSortType(),
@@ -167,9 +166,15 @@ public final class Main {
                                     null, output2));
                         }
                     } else if (currentCommand.getCriteria().equals(Constants.LONGEST)) {
-                        String output = Movie.longestMovies(currentCommand, movies);
-                        arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
-                                null, output));
+                        String output1 = Movie.longestMovies(currentCommand, movies);
+                        String output2 = Serial.longestSerial(currentCommand, serials);
+                        if (currentCommand.getObjectType().equals(Constants.MOVIES)) {
+                            arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output1));
+                        } else {
+                            arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output2));
+                        }
                     } else if (currentCommand.getCriteria().equals(Constants.FAVORITE)) {
                         String output1 = Movie.favoriteMovies(currentCommand, movies, users);
                         String output2 = Serial.favoriteSerials(currentCommand, serials, users);
@@ -182,10 +187,26 @@ public final class Main {
                         }
                     } else if (currentCommand.getCriteria().equals(Constants.RATINGS)) {
                         String output1 = Movie.ratingMovies(currentCommand, movies);
-                        //String output2 = Serial.ratingSerials(currentCommand, serials, users);
-                        arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                        String output2 = Serial.ratingSerial(currentCommand, serials);
+                        if (currentCommand.getObjectType().equals(Constants.MOVIES)) {
+                            arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                     null, output1));
-                        System.out.println(output1);
+                        } else {
+                            arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                    null, output2));
+                        }
+                    } else if (currentCommand.getCriteria().equals(Constants.AVERAGE)) {
+                        String output = Actor.averageActors(currentCommand, actors, movies, serials);
+                        arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                null, output));
+                    } else if (currentCommand.getCriteria().equals(Constants.AWARDS)) {
+                        String output = Actor.awardsActor(currentCommand, actors);
+                        arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                null, output));
+                    } else if (currentCommand.getCriteria().equals(Constants.FILTER_DESCRIPTIONS)) {
+                        String output = Actor.filterDescription(currentCommand, actors);
+                        arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                null, output));
                     }
                 }
             }
