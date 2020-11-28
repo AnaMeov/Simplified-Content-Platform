@@ -40,14 +40,11 @@ public class Actor {
         return careerDescription;
     }
 
-    @Override
-    public String toString() {
-        return "ActorInputData{"
-                + "name='" + name + '\'';
-//                + ", careerDescription='"
-//                + careerDescription + '\''
-//                + ", filmography=" + filmography + '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "ActorInputData{"
+//                + "name='" + name + '\'';
+//    }
 
     /**
      * @param compActor
@@ -171,7 +168,8 @@ public class Actor {
 
         actorsBuff.removeIf((actor) -> {
             for (String keyword : currentCommand.getFilters().get(2)) {
-                if (!actor.getCareerDescription().contains(keyword)) {
+                if (!actor.getCareerDescription().replace('\n', ' ').
+                        toLowerCase().matches(".*\\b"+keyword+"\\b.*")) {
                     return true;
                 }
             }
@@ -182,7 +180,7 @@ public class Actor {
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(actorsBuff);
         }
-        for (int i = 0; i < currentCommand.getNumber() && i < actorsBuff.size(); i++) {
+        for (int i = 0; i < actorsBuff.size(); i++) {
             actorssList.add(actorsBuff.get(i).getName());
         }
         return Constants.QUERY_RES + actorssList.toString();

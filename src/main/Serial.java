@@ -41,10 +41,6 @@ public class Serial extends Show {
         return seasons;
     }
 
-    public final double getRating() {
-        return rating;
-    }
-
     public final void setRating(final double rating) {
         this.rating = rating;
     }

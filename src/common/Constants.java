@@ -97,4 +97,10 @@ public final class Constants {
     public static final String AL_RATED = " has been already rated";
     public static final String LONGEST = "longest";
     public static final String AVERAGE = "average";
+    public static final String STANDARD = "standard";
+    public static final String STANDARD_SUCCESS = "StandardRecommendation result: ";
+    public static final String STANDARD_ERROR = "StandardRecommendation cannot be applied!";
+    public static final String STANDARD_BEST_UNSEEN_SUCCESS = "BestRatedUnseenRecommendation result: ";
+    public static final String STANDARD_BEST_UNSEEN_ERROR = "BestRatedUnseenRecommendation cannot be applied!";
+    public static final String BEST_UNSEEN = "best_unseen";
 }

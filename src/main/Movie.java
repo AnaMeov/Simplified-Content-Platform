@@ -13,12 +13,17 @@ public class Movie extends Show {
 
     private final int duration;
     private double rating;
+    private double sumRating;
+    private int noRatings;
 
     public Movie(final String title, final ArrayList<String> cast,
                  final ArrayList<String> genres, final int year,
                  final int duration) {
         super(title, year, cast, genres);
         this.duration = duration;
+        this.sumRating = 0.0;
+        this.noRatings = 0;
+        this.rating = 0;
     }
 
     public final int getDuration() {
@@ -30,7 +35,16 @@ public class Movie extends Show {
     }
 
     public final void setRating(final double rating) {
-        this.rating = rating;
+        sumRating = sumRating + rating;
+        noRatings++;
+        this.rating = sumRating/noRatings;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "title=" + getTitle() +
+                '}';
     }
 
     /**
@@ -221,6 +235,7 @@ public class Movie extends Show {
         for (Movie movie : moviesBuff) {
             ratingMovie.put(movie.getTitle(), movie.getRating());
         }
+
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
             if (currentCommand.getFilters().get(0).get(0) != null) {
                 if (!Integer.toString(moviesBuff.get(i).getYear()).

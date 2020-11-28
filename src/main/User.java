@@ -1,6 +1,7 @@
 package main;
 
 import common.Constants;
+import fileio.ActionInputData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class User {
     private final Map<String, Integer> history;
     private final ArrayList<String> favoriteShows;
     private int numberRatings = 0;
+    //TODO:
     private final Map<String, Double> ratingMovie = new HashMap<>();
     private final Map<String, ArrayList<Integer>> ratingSerial = new HashMap<>();
 
@@ -46,6 +48,40 @@ public class User {
     public final int getNumberRatings() {
         return numberRatings;
     }
+
+    @Override
+    public final String toString() {
+        return username;
+    }
+
+    public static Comparator<Movie> getCompByDoubleMovie(final HashMap<String, Double> compMovie, ArrayList<Movie> movies) {
+        return new Comparator<Movie>() {
+            @Override
+            public int compare(final Movie m1, final Movie m2) {
+                if(Double.compare(compMovie.get(m2.getTitle()),
+                        compMovie.get(m1.getTitle())) == 0) {
+                    return movies.indexOf(m1) - movies.indexOf(m2);
+                }
+                return Double.compare(compMovie.get(m2.getTitle()),
+                        compMovie.get(m1.getTitle()));
+            }
+        };
+    }
+
+    public static Comparator<Serial> getCompByDoubleSerial(final HashMap<String, Double> compSerial, ArrayList<Serial> serials) {
+        return new Comparator<Serial>() {
+            @Override
+            public int compare(final Serial s1, final Serial s2) {
+                if (Double.compare(compSerial.get(s2.getTitle()),
+                        compSerial.get(s1.getTitle())) == 0) {
+                    return serials.indexOf(s1) - serials.indexOf(s2);
+                }
+                return Double.compare(compSerial.get(s2.getTitle()),
+                        compSerial.get(s1.getTitle()));
+            }
+        };
+    }
+
 
     /**
      * @return
@@ -178,8 +214,47 @@ public class User {
         return Constants.QUERY_RES + usersBuff.toString();
     }
 
-    @Override
-    public final String toString() {
-        return username;
+    public String standardUser(ArrayList<Movie> movies,
+                               ArrayList<Serial> serials) {
+
+        for (Movie movie : movies) {
+            if (!history.containsKey(movie.getTitle())) {
+                return Constants.STANDARD_SUCCESS + movie.getTitle();
+            }
+        }
+        for (Serial serial : serials) {
+            if(!history.containsKey(serial.getTitle())) {
+                return Constants.STANDARD_SUCCESS + serial.getTitle();
+            }
+        }
+        return Constants.STANDARD_ERROR;
     }
+
+    public String bestUnseen(ArrayList<Movie> movies, ArrayList<Serial> serials) {
+        HashMap<String, Double> ratingShow = new HashMap<>();
+        ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
+        ArrayList<Serial> serialBuff = new ArrayList<>(serials);
+
+        for (Movie movie : moviesBuff) {
+            ratingShow.put(movie.getTitle(), movie.getRating());
+        }
+        moviesBuff.sort(getCompByDoubleMovie(ratingShow, movies));
+        for (Movie movie : moviesBuff) {
+            if(!history.containsKey(movie.getTitle())) {
+                return Constants.STANDARD_BEST_UNSEEN_SUCCESS + movie.getTitle();
+            }
+        }
+
+        for (Serial serial : serialBuff) {
+            ratingShow.put(serial.getTitle(), serial.getSerialRating());
+        }
+        serialBuff.sort(getCompByDoubleSerial(ratingShow, serials));
+        for(Serial serial : serialBuff) {
+            if(!history.containsKey(serial.getTitle())) {
+                return Constants.STANDARD_BEST_UNSEEN_SUCCESS + serial.getTitle();
+            }
+        }
+        return Constants.STANDARD_BEST_UNSEEN_ERROR;
+    }
+
 }

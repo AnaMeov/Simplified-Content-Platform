@@ -209,6 +209,26 @@ public final class Main {
                                 null, output));
                     }
                 }
+                if(currentCommand.getActionType().equals(Constants.RECOMMENDATION)) {
+                    if(currentCommand.getType().equals(Constants.STANDARD)) {
+                        for (User user : users) {
+                            if (currentCommand.getUsername().equals(user.getUsername())) {
+                                String output = user.standardUser(movies, serials);
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                        null, output));
+                            }
+                        }
+                    }
+                    if(currentCommand.getType().equals(Constants.BEST_UNSEEN)) {
+                        for (User user : users) {
+                            if (currentCommand.getUsername().equals(user.getUsername())) {
+                                String output = user.bestUnseen(movies, serials);
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                        null, output));
+                            }
+                        }
+                    }
+                }
             }
         }
         fileWriter.closeJSON(arrayResult);
