@@ -31,6 +31,7 @@ public class Serial extends Show {
         super(title, year, cast, genres);
         this.numberOfSeasons = numberOfSeasons;
         this.seasons = seasons;
+        this.rating = rating;
     }
 
     public final int getNumberOfSeasons() {
@@ -60,7 +61,7 @@ public class Serial extends Show {
      * @return
      */
     public double getSerialRating() {
-        double rating;
+        //double rating;
         double ratingTotal = 0.0;
         for (Season season : seasons) {
             rating = 0.0;
@@ -182,7 +183,7 @@ public class Serial extends Show {
             favoriteSerials.put(serial.getTitle(), 0);
         }
         for (User user : users) {
-            for (String videoTitle : user.getFavoriteMovies()) {
+            for (String videoTitle : user.getFavoriteShows()) {
                 for (Serial serial : serials) {
                     if (serial.getTitle().equals(videoTitle)) {
                         if (favoriteSerials.containsKey(videoTitle)) {

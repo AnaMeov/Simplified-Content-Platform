@@ -100,7 +100,19 @@ public final class Constants {
     public static final String STANDARD = "standard";
     public static final String STANDARD_SUCCESS = "StandardRecommendation result: ";
     public static final String STANDARD_ERROR = "StandardRecommendation cannot be applied!";
-    public static final String STANDARD_BEST_UNSEEN_SUCCESS = "BestRatedUnseenRecommendation result: ";
-    public static final String STANDARD_BEST_UNSEEN_ERROR = "BestRatedUnseenRecommendation cannot be applied!";
+    public static final String STANDARD_BEST_UNSEEN_SUCCESS =
+            "BestRatedUnseenRecommendation result: ";
+    public static final String STANDARD_BEST_UNSEEN_ERROR =
+            "BestRatedUnseenRecommendation cannot be applied!";
     public static final String BEST_UNSEEN = "best_unseen";
+    public static final int MAGIC_NUMBER = 3;
+    public static final String PREMIUM = "PREMIUM";
+    public static final String SEARCH_ERROR = "SearchRecommendation cannot be applied!";
+    public static final String SEARCH = "search";
+    public static final String SEARCH_SUCCESS = "SearchRecommendation result: ";
+    public static final String FAVORITE_ERROR = "FavoriteRecommendation cannot be applied!";
+    public static final String FAV_SUCCESS = "FavoriteRecommendation result: ";
+    public static final String POPULAR_ERROR = "PopularRecommendation cannot be applied!";
+    public static final String POPULAR_SUCCES = "PopularRecommendation result: ";
+    public static final String POPULAR = "popular";
 }

@@ -41,4 +41,11 @@ public class Show {
         this.type = type;
     }
 
+    /**
+     * @return
+     */
+    @Override
+    public String toString() {
+        return title;
+    }
 }

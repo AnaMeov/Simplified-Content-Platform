@@ -3,10 +3,13 @@ package main;
 import actor.ActorsAwards;
 import common.Constants;
 import fileio.ActionInputData;
-import fileio.ActorInputData;
 import utils.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Collections;
 
 public class Actor {
     private final String name;
@@ -40,11 +43,10 @@ public class Actor {
         return careerDescription;
     }
 
-//    @Override
-//    public String toString() {
-//        return "ActorInputData{"
-//                + "name='" + name + '\'';
-//    }
+    @Override
+    public String toString() {
+        return name;
+    }
 
     /**
      * @param compActor
@@ -73,9 +75,12 @@ public class Actor {
         };
     }
 
+    /**
+     * @return
+     */
     public int getNumberAwards() {
         int number = 0;
-        for(Map.Entry<ActorsAwards,Integer> entry : awards.entrySet()) {
+        for (Map.Entry<ActorsAwards, Integer> entry : awards.entrySet()) {
             number = number + entry.getValue();
         }
         return number;
@@ -85,15 +90,21 @@ public class Actor {
         return new Comparator<Actor>() {
             @Override
             public int compare(final Actor a1, final Actor a2) {
-                    if (a1.getNumberAwards() - a2.getNumberAwards() != 0) {
-                        return a1.getNumberAwards() - a2.getNumberAwards();
-                    }
+                if (a1.getNumberAwards() - a2.getNumberAwards() != 0) {
+                    return a1.getNumberAwards() - a2.getNumberAwards();
+                }
                 return a1.getName().compareTo(a2.getName());
             }
         };
     }
 
-
+    /**
+     * @param currentCommand
+     * @param actors
+     * @param movies
+     * @param serials
+     * @return
+     */
     public static String averageActors(final ActionInputData currentCommand,
                                        final ArrayList<Actor> actors,
                                        final ArrayList<Movie> movies,
@@ -101,7 +112,7 @@ public class Actor {
         HashMap<String, Double> ratingActors = new HashMap<>();
         HashMap<String, Double> ratingShows = new HashMap<>();
         ArrayList<Actor> actorsBuff = new ArrayList<>(actors);
-        ArrayList<String> actorssList = new ArrayList<>();
+        ArrayList<String> actorsList = new ArrayList<>();
 
         for (Actor actor : actors) {
             ratingActors.put(actor.getName(), 0.0);
@@ -114,27 +125,41 @@ public class Actor {
         }
 
         for (Actor actor : actors) {
+            int numberShows = 0;
             ratingActors.put(actor.getName(), 0.0);
             for (String filmography : actor.getFilmography()) {
-                if (ratingShows.containsKey(filmography)) {
-                    ratingActors.put(actor.getName(), ratingActors.get(actor.getName()) + ratingShows.get(filmography));
+                if (ratingShows.containsKey(filmography) && ratingShows.get(filmography) != 0) {
+                    ratingActors.put(actor.getName(), ratingActors.get(actor.getName())
+                            + ratingShows.get(filmography));
+                    numberShows++;
                 }
             }
+            if(numberShows != 0) {
+                ratingActors.put(actor.getName(), ratingActors.get(actor.getName())/numberShows);
+            }
         }
+
         actorsBuff.sort(getCompByDouble(ratingActors));
+
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(actorsBuff);
         }
+
         for (int i = 0, j = 0; i < actorsBuff.size()
                 && j < currentCommand.getNumber(); i++) {
             if (ratingActors.get(actorsBuff.get(i).getName()) != 0) {
                 j++;
-                actorssList.add(actorsBuff.get(i).getName());
+                actorsList.add(actorsBuff.get(i).getName());
             }
         }
-        return Constants.QUERY_RES + actorssList.toString();
+        return Constants.QUERY_RES + actorsList.toString();
     }
 
+    /**
+     * @param currentCommand
+     * @param actors
+     * @return
+     */
     public static String awardsActor(final ActionInputData currentCommand,
                                      final ArrayList<Actor> actors) {
 
@@ -142,7 +167,7 @@ public class Actor {
         ArrayList<String> actorssList = new ArrayList<>();
 
         actorsBuff.removeIf((actor) -> {
-            for (String award : currentCommand.getFilters().get(3)) {
+            for (String award : currentCommand.getFilters().get(Constants.MAGIC_NUMBER)) {
                 if (!actor.getAwards().containsKey(Utils.stringToAwards(award))) {
                     return true;
                 }
@@ -160,8 +185,13 @@ public class Actor {
         return Constants.QUERY_RES + actorssList.toString();
     }
 
-    public static String filterDescription(ActionInputData currentCommand,
-                                           ArrayList<Actor> actors) {
+    /**
+     * @param currentCommand
+     * @param actors
+     * @return
+     */
+    public static String filterDescription(final ActionInputData currentCommand,
+                                           final ArrayList<Actor> actors) {
 
         ArrayList<Actor> actorsBuff = new ArrayList<>(actors);
         ArrayList<String> actorssList = new ArrayList<>();
@@ -169,7 +199,7 @@ public class Actor {
         actorsBuff.removeIf((actor) -> {
             for (String keyword : currentCommand.getFilters().get(2)) {
                 if (!actor.getCareerDescription().replace('\n', ' ').
-                        toLowerCase().matches(".*\\b"+keyword+"\\b.*")) {
+                        toLowerCase().matches(".*\\b" + keyword + "\\b.*")) {
                     return true;
                 }
             }
@@ -180,8 +210,8 @@ public class Actor {
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(actorsBuff);
         }
-        for (int i = 0; i < actorsBuff.size(); i++) {
-            actorssList.add(actorsBuff.get(i).getName());
+        for (Actor actor : actorsBuff) {
+            actorssList.add(actor.getName());
         }
         return Constants.QUERY_RES + actorssList.toString();
     }

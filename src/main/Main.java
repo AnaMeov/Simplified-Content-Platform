@@ -3,7 +3,14 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import fileio.*;
+import fileio.ActionInputData;
+import fileio.ActorInputData;
+import fileio.Input;
+import fileio.InputLoader;
+import fileio.MovieInputData;
+import fileio.SerialInputData;
+import fileio.UserInputData;
+import fileio.Writer;
 import org.json.simple.JSONArray;
 
 import java.io.File;
@@ -196,21 +203,23 @@ public final class Main {
                                     null, output2));
                         }
                     } else if (currentCommand.getCriteria().equals(Constants.AVERAGE)) {
-                        String output = Actor.averageActors(currentCommand, actors, movies, serials);
+                        String output = Actor.averageActors(currentCommand, actors, movies,
+                                serials);
                         arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                 null, output));
                     } else if (currentCommand.getCriteria().equals(Constants.AWARDS)) {
                         String output = Actor.awardsActor(currentCommand, actors);
                         arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                 null, output));
-                    } else if (currentCommand.getCriteria().equals(Constants.FILTER_DESCRIPTIONS)) {
+                    } else if (currentCommand.getCriteria().equals(Constants.
+                            FILTER_DESCRIPTIONS)) {
                         String output = Actor.filterDescription(currentCommand, actors);
                         arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                 null, output));
                     }
                 }
-                if(currentCommand.getActionType().equals(Constants.RECOMMENDATION)) {
-                    if(currentCommand.getType().equals(Constants.STANDARD)) {
+                if (currentCommand.getActionType().equals(Constants.RECOMMENDATION)) {
+                    if (currentCommand.getType().equals(Constants.STANDARD)) {
                         for (User user : users) {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
                                 String output = user.standardUser(movies, serials);
@@ -219,10 +228,40 @@ public final class Main {
                             }
                         }
                     }
-                    if(currentCommand.getType().equals(Constants.BEST_UNSEEN)) {
+                    if (currentCommand.getType().equals(Constants.BEST_UNSEEN)) {
                         for (User user : users) {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
                                 String output = user.bestUnseen(movies, serials);
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                        null, output));
+                            }
+                        }
+                    }
+                    if (currentCommand.getType().equals(Constants.SEARCH)) {
+                        for (User user : users) {
+                            if (currentCommand.getUsername().equals(user.getUsername())) {
+                                String output = user.searchPremium(currentCommand, movies,
+                                        serials);
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                        null, output));
+                            }
+                        }
+                    }
+                    if (currentCommand.getType().equals(Constants.FAVORITE)) {
+                        for (User user : users) {
+                            if (currentCommand.getUsername().equals(user.getUsername())) {
+                                String output = user.favoritePremium(currentCommand, movies,
+                                        serials, users);
+                                arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
+                                        null, output));
+                            }
+                        }
+                    }
+                    if (currentCommand.getType().equals(Constants.POPULAR)) {
+                        for (User user : users) {
+                            if (currentCommand.getUsername().equals(user.getUsername())) {
+                                String output = user.popularPremium(currentCommand, movies,
+                                        serials, users);
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }

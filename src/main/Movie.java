@@ -34,17 +34,13 @@ public class Movie extends Show {
         return rating;
     }
 
+    /**
+     * @param rating
+     */
     public final void setRating(final double rating) {
-        sumRating = sumRating + rating;
-        noRatings++;
-        this.rating = sumRating/noRatings;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "title=" + getTitle() +
-                '}';
+            sumRating = sumRating + rating;
+            noRatings++;
+            this.rating = sumRating/noRatings;
     }
 
     /**
@@ -65,6 +61,10 @@ public class Movie extends Show {
         };
     }
 
+    /**
+     * @param compMovie
+     * @return
+     */
     public static Comparator<Movie> getCompByDouble(final HashMap<String, Double> compMovie) {
         return new Comparator<Movie>() {
             @Override
@@ -186,8 +186,9 @@ public class Movie extends Show {
         HashMap<String, Integer> favoriteMovies = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<String> moviesList = new ArrayList<>();
+
         for (User user : users) {
-            for (String videoTitle : user.getFavoriteMovies()) {
+            for (String videoTitle : user.getFavoriteShows()) {
                 for (Movie movie : movies) {
                     if (movie.getTitle().equals(videoTitle)) {
                         if (favoriteMovies.containsKey(videoTitle)) {
@@ -227,6 +228,11 @@ public class Movie extends Show {
         return Constants.QUERY_RES + moviesList.toString();
     }
 
+    /**
+     * @param currentCommand
+     * @param movies
+     * @return
+     */
     public static String ratingMovies(final ActionInputData currentCommand,
                                       final ArrayList<Movie> movies) {
         HashMap<String, Double> ratingMovie = new HashMap<>();
