@@ -43,14 +43,16 @@ public class Actor {
         return careerDescription;
     }
 
+    /**
+     * Name to String
+     */
     @Override
     public String toString() {
         return name;
     }
 
     /**
-     * @param compActor
-     * @return
+     * Compare actors first by ratings and second by name
      */
     public static Comparator<Actor> getCompByDouble(final HashMap<String, Double> compActor) {
         return new Comparator<Actor>() {
@@ -66,6 +68,9 @@ public class Actor {
         };
     }
 
+    /**
+     * Compare actors by name
+     */
     public static Comparator<Actor> getCompByName() {
         return new Comparator<Actor>() {
             @Override
@@ -76,7 +81,7 @@ public class Actor {
     }
 
     /**
-     * @return
+     * Calculate number of awards
      */
     public int getNumberAwards() {
         int number = 0;
@@ -86,6 +91,9 @@ public class Actor {
         return number;
     }
 
+    /**
+     * Compare actors first by number of awards, second by name
+     */
     public static Comparator<Actor> getCompByAwards() {
         return new Comparator<Actor>() {
             @Override
@@ -99,17 +107,17 @@ public class Actor {
     }
 
     /**
-     * @param currentCommand
-     * @param actors
-     * @param movies
-     * @param serials
-     * @return
+     * Function to determine first N actors sorted by the arithmetic mean of shows'
+     * ratings
      */
     public static String averageActors(final ActionInputData currentCommand,
                                        final ArrayList<Actor> actors,
                                        final ArrayList<Movie> movies,
                                        final ArrayList<Serial> serials) {
+
+        // hashmap to store actors' name and rating
         HashMap<String, Double> ratingActors = new HashMap<>();
+        // hashmap to store shows' name and rating
         HashMap<String, Double> ratingShows = new HashMap<>();
         ArrayList<Actor> actorsBuff = new ArrayList<>(actors);
         ArrayList<String> actorsList = new ArrayList<>();
@@ -124,6 +132,7 @@ public class Actor {
             ratingShows.put(serial.getTitle(), serial.getSerialRating());
         }
 
+        // populate actors' hashmap
         for (Actor actor : actors) {
             int numberShows = 0;
             ratingActors.put(actor.getName(), 0.0);
@@ -134,17 +143,19 @@ public class Actor {
                     numberShows++;
                 }
             }
-            if(numberShows != 0) {
-                ratingActors.put(actor.getName(), ratingActors.get(actor.getName())/numberShows);
+            // calculate the arithmetic mean of ratings
+            if (numberShows != 0) {
+                ratingActors.put(actor.getName(), ratingActors.get(actor.getName()) / numberShows);
             }
         }
 
+        // sort the actors
         actorsBuff.sort(getCompByDouble(ratingActors));
-
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(actorsBuff);
         }
 
+        // selecting first N actors
         for (int i = 0, j = 0; i < actorsBuff.size()
                 && j < currentCommand.getNumber(); i++) {
             if (ratingActors.get(actorsBuff.get(i).getName()) != 0) {
@@ -156,9 +167,7 @@ public class Actor {
     }
 
     /**
-     * @param currentCommand
-     * @param actors
-     * @return
+     * Function to determine first N actors sorted by the awards
      */
     public static String awardsActor(final ActionInputData currentCommand,
                                      final ArrayList<Actor> actors) {
@@ -166,6 +175,7 @@ public class Actor {
         ArrayList<Actor> actorsBuff = new ArrayList<>(actors);
         ArrayList<String> actorssList = new ArrayList<>();
 
+        // remove actors from list if they don't have a specific award
         actorsBuff.removeIf((actor) -> {
             for (String award : currentCommand.getFilters().get(Constants.MAGIC_NUMBER)) {
                 if (!actor.getAwards().containsKey(Utils.stringToAwards(award))) {
@@ -175,6 +185,7 @@ public class Actor {
             return false;
         });
 
+        // sort the actors
         actorsBuff.sort(getCompByAwards());
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(actorsBuff);
@@ -186,9 +197,8 @@ public class Actor {
     }
 
     /**
-     * @param currentCommand
-     * @param actors
-     * @return
+     * Function to determine all actors which have some specific keywords in their
+     * description
      */
     public static String filterDescription(final ActionInputData currentCommand,
                                            final ArrayList<Actor> actors) {
@@ -196,6 +206,7 @@ public class Actor {
         ArrayList<Actor> actorsBuff = new ArrayList<>(actors);
         ArrayList<String> actorssList = new ArrayList<>();
 
+        // remove actors from list if they don't have specific words in their description
         actorsBuff.removeIf((actor) -> {
             for (String keyword : currentCommand.getFilters().get(2)) {
                 if (!actor.getCareerDescription().replace('\n', ' ').
@@ -206,6 +217,7 @@ public class Actor {
             return false;
         });
 
+        // sort the actors
         actorsBuff.sort(getCompByName());
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(actorsBuff);

@@ -131,7 +131,7 @@ public final class Main {
                     if (currentCommand.getType().equals(Constants.FAVORITE)) {
                         for (User user : users) {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
-                                String output = user.addFavorite(currentCommand.getTitle());
+                                String output = user.addFavorite(currentCommand);
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }
@@ -139,7 +139,7 @@ public final class Main {
                     } else if (input.getCommands().get(i).getType().equals(Constants.VIEW)) {
                         for (User user : users) {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
-                                String output = user.addView(currentCommand.getTitle());
+                                String output = user.addView(currentCommand);
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }
@@ -147,9 +147,7 @@ public final class Main {
                     } else if (input.getCommands().get(i).getType().equals(Constants.RATING)) {
                         for (User user : users) {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
-                                String output = user.addRating(movies, serials,
-                                        currentCommand.getTitle(), currentCommand.getGrade(),
-                                        currentCommand.getSeasonNumber());
+                                String output = user.addRating(currentCommand, movies, serials);
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }
@@ -158,8 +156,7 @@ public final class Main {
                 }
                 if (currentCommand.getActionType().equals(Constants.QUERY)) {
                     if (currentCommand.getCriteria().equals(Constants.NUM_RATINGS)) {
-                        String output = User.ratingsNumber(currentCommand.getSortType(),
-                                currentCommand.getNumber(), users);
+                        String output = User.ratingsNumber(currentCommand, users);
                         arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                 null, output));
                     } else if (currentCommand.getCriteria().equals(Constants.MOST_VIEWED)) {
@@ -250,8 +247,7 @@ public final class Main {
                     if (currentCommand.getType().equals(Constants.FAVORITE)) {
                         for (User user : users) {
                             if (currentCommand.getUsername().equals(user.getUsername())) {
-                                String output = user.favoritePremium(currentCommand, movies,
-                                        serials, users);
+                                String output = user.favoritePremium(movies, serials, users);
                                 arrayResult.add(fileWriter.writeFile(currentCommand.getActionId(),
                                         null, output));
                             }

@@ -35,17 +35,16 @@ public class Movie extends Show {
     }
 
     /**
-     * @param rating
+     * Calculate rating for movies
      */
     public final void setRating(final double rating) {
-            sumRating = sumRating + rating;
-            noRatings++;
-            this.rating = sumRating/noRatings;
+        sumRating = sumRating + rating;
+        noRatings++;
+        this.rating = sumRating / noRatings;
     }
 
     /**
-     * @param compMovie
-     * @return
+     * Compare movies first by an integer (views/nr of favorites) and second by name
      */
     public static Comparator<Movie> getCompByInt(final HashMap<String, Integer> compMovie) {
         return new Comparator<Movie>() {
@@ -62,8 +61,7 @@ public class Movie extends Show {
     }
 
     /**
-     * @param compMovie
-     * @return
+     * Compare movies first by a double (ratings) and second by name
      */
     public static Comparator<Movie> getCompByDouble(final HashMap<String, Double> compMovie) {
         return new Comparator<Movie>() {
@@ -80,20 +78,22 @@ public class Movie extends Show {
     }
 
     /**
-     * @param currentCommand
-     * @param movies
-     * @param users
-     * @return
+     * Function to determine first N movies sorted by views
      */
     public static String mostViewed(final ActionInputData currentCommand,
                                     final ArrayList<Movie> movies,
                                     final ArrayList<User> users) {
+
+        // hashmap containing movies' name and number of views
         HashMap<String, Integer> viewsMovie = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<String> moviesList = new ArrayList<>();
+
         for (Movie movie : moviesBuff) {
             viewsMovie.put(movie.getTitle(), 0);
         }
+
+        // populate the hashmap
         for (User user : users) {
             for (Map.Entry<String, Integer> entry : user.getHistory().entrySet()) {
                 if (viewsMovie.containsKey(entry.getKey())) {
@@ -104,6 +104,8 @@ public class Movie extends Show {
                 }
             }
         }
+
+        // filter movies by input filters year and genre
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
             if (currentCommand.getFilters().get(0).get(0) != null) {
                 if (!Integer.toString(moviesBuff.get(i).getYear()).
@@ -119,10 +121,14 @@ public class Movie extends Show {
                 }
             }
         }
+
+        // sort the movies
         moviesBuff.sort(getCompByInt(viewsMovie));
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(moviesBuff);
         }
+
+        // selecting first N movies
         for (int i = 0, j = 0; i < moviesBuff.size() && j < currentCommand.getNumber(); i++) {
             if (viewsMovie.get(moviesBuff.get(i).getTitle()) != 0) {
                 j++;
@@ -133,18 +139,21 @@ public class Movie extends Show {
     }
 
     /**
-     * @param currentCommand
-     * @param movies
-     * @return
+     * Function to determine first N movies sorted by their length
      */
     public static String longestMovies(final ActionInputData currentCommand,
                                        final ArrayList<Movie> movies) {
+
+        // hashmap containing movies' name and length
         HashMap<String, Integer> longMovie = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<String> moviesList = new ArrayList<>();
+
         for (Movie movie : moviesBuff) {
             longMovie.put(movie.getTitle(), movie.getDuration());
         }
+
+        // populate the hashmap
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
             if (currentCommand.getFilters().get(0).get(0) != null) {
                 if (!Integer.toString(moviesBuff.get(i).getYear()).
@@ -160,10 +169,14 @@ public class Movie extends Show {
                 }
             }
         }
+
+        // sort the movies
         moviesBuff.sort(getCompByInt(longMovie));
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(moviesBuff);
         }
+
+        // selecting first N movies
         for (int i = 0, j = 0; i < moviesBuff.size()
                 && j < currentCommand.getNumber(); i++) {
             if (longMovie.get(moviesBuff.get(i).getTitle()) != 0) {
@@ -175,18 +188,19 @@ public class Movie extends Show {
     }
 
     /**
-     * @param currentCommand
-     * @param movies
-     * @param users
-     * @return
+     * Function to sort first N movies by the number of appearances in users'
+     * favorite video lists
      */
     public static String favoriteMovies(final ActionInputData currentCommand,
                                         final ArrayList<Movie> movies,
                                         final ArrayList<User> users) {
+
+        // hashmap containing movies' name and number of views
         HashMap<String, Integer> favoriteMovies = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<String> moviesList = new ArrayList<>();
 
+        // populate the hashmap
         for (User user : users) {
             for (String videoTitle : user.getFavoriteShows()) {
                 for (Movie movie : movies) {
@@ -200,6 +214,8 @@ public class Movie extends Show {
                 }
             }
         }
+
+        // filter movies by input filters year and genre
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
             if (currentCommand.getFilters().get(0).get(0) != null) {
                 if (!Integer.toString(moviesBuff.get(i).getYear()).
@@ -215,10 +231,14 @@ public class Movie extends Show {
                 }
             }
         }
+
+        // sort the movies
         moviesBuff.sort(getCompByInt(favoriteMovies));
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(moviesBuff);
         }
+
+        // selecting first N movies
         for (int i = 0, j = 0; i < moviesBuff.size() && j < currentCommand.getNumber(); i++) {
             if (favoriteMovies.get(moviesBuff.get(i).getTitle()) != 0) {
                 j++;
@@ -229,19 +249,22 @@ public class Movie extends Show {
     }
 
     /**
-     * @param currentCommand
-     * @param movies
-     * @return
+     * Function to sort first N movies after rating
      */
     public static String ratingMovies(final ActionInputData currentCommand,
                                       final ArrayList<Movie> movies) {
+
+        // hashmap that contains movies' name and rating
         HashMap<String, Double> ratingMovie = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<String> moviesList = new ArrayList<>();
+
+        // populate the hashmap
         for (Movie movie : moviesBuff) {
             ratingMovie.put(movie.getTitle(), movie.getRating());
         }
 
+        // filter movies by input filters year and genre
         for (int i = moviesBuff.size() - 1; i >= 0; i--) {
             if (currentCommand.getFilters().get(0).get(0) != null) {
                 if (!Integer.toString(moviesBuff.get(i).getYear()).
@@ -257,10 +280,14 @@ public class Movie extends Show {
                 }
             }
         }
+
+        // sort the hashmap
         moviesBuff.sort(getCompByDouble(ratingMovie));
         if (currentCommand.getSortType().equals(Constants.DSC)) {
             Collections.reverse(moviesBuff);
         }
+
+        // selecting first N movies
         for (int i = 0, j = 0; i < moviesBuff.size()
                 && j < currentCommand.getNumber(); i++) {
             if (ratingMovie.get(moviesBuff.get(i).getTitle()) != 0) {

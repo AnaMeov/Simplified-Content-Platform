@@ -3,7 +3,6 @@ package main;
 import common.Constants;
 import fileio.ActionInputData;
 
-import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Comparator;
@@ -16,9 +15,10 @@ public class User {
     private final Map<String, Integer> history;
     private final ArrayList<String> favoriteShows;
     private int numberRatings = 0;
+    // hashmap containing movie name and rating
     private final Map<String, Double> ratingMovie = new HashMap<>();
+    // hashmap containing serial name and rating
     private final Map<String, ArrayList<Integer>> ratingSerial = new HashMap<>();
-
 
     public User(final String username, final String subscriptionType,
                 final Map<String, Integer> history,
@@ -31,10 +31,6 @@ public class User {
 
     public final String getUsername() {
         return username;
-    }
-
-    public final String getSubscriptionType() {
-        return subscriptionType;
     }
 
     public final Map<String, Integer> getHistory() {
@@ -50,7 +46,7 @@ public class User {
     }
 
     /**
-     * @return
+     * Username to String
      */
     @Override
     public final String toString() {
@@ -58,9 +54,7 @@ public class User {
     }
 
     /**
-     * @param compMovie
-     * @param movies
-     * @return
+     * Compare movies by a double (rating) and second by their order in the data base
      */
     public static Comparator<Movie> getCompByDoubleMovie(final HashMap<String, Double> compMovie,
                                                          final ArrayList<Movie> movies) {
@@ -78,9 +72,7 @@ public class User {
     }
 
     /**
-     * @param compSerial
-     * @param serials
-     * @return
+     * Compare serials by a double (rating) and second by their order in the data base
      */
     public static Comparator<Serial> getCompByDoubleSerial(final HashMap<String, Double> compSerial,
                                                            final ArrayList<Serial> serials) {
@@ -98,8 +90,8 @@ public class User {
     }
 
     /**
-     * @param compShow
-     * @return
+     * Compare shows first by an integer (number of views) and second by their order in the
+     * data base
      */
     public static Comparator<Show> getCompByInt(final HashMap<String, Integer> compShow,
                                                 final ArrayList<Show> shows) {
@@ -117,8 +109,7 @@ public class User {
     }
 
     /**
-     * @param compShow
-     * @return
+     * Compare shows by number of favorites
      */
     public static Comparator<String> getCompByIntFav(final HashMap<String, Integer> compShow) {
         return new Comparator<String>() {
@@ -130,8 +121,7 @@ public class User {
     }
 
     /**
-     * @param compShow
-     * @return
+     * Compare shows first by a double (rating) and by name
      */
     public static Comparator<Show> getCompByDoubleShow(final HashMap<String, Double> compShow) {
         return new Comparator<Show>() {
@@ -147,9 +137,8 @@ public class User {
         };
     }
 
-
     /**
-     * @return
+     * Compare users first by a double (rating) and second by their username
      */
     public static Comparator<User> getcompByUser() {
         return new Comparator<User>() {
@@ -166,141 +155,146 @@ public class User {
     }
 
     /**
-     * functia de video-uri favorite
-     *
-     * @param videoTitle
-     * @return
+     * Command to put a show to favorite
      */
-    public final String addFavorite(final String videoTitle) {
-        if (videoTitle == null) {
+    public final String addFavorite(final ActionInputData currentCommand) {
+        if (currentCommand.getTitle() == null) {
             return null;
         } else {
-            if (history.containsKey(videoTitle)) {
-                if (!favoriteShows.contains(videoTitle)) {
-                    favoriteShows.add(videoTitle);
-                    return Constants.SUCCESS + videoTitle + Constants.FAVORITE_SUCCESS;
+            if (history.containsKey(currentCommand.getTitle())) {
+                if (!favoriteShows.contains(currentCommand.getTitle())) {
+                    favoriteShows.add(currentCommand.getTitle());
+                    return Constants.SUCCESS + currentCommand.getTitle()
+                            + Constants.FAVORITE_SUCCESS;
                 } else {
-                    return Constants.ERROR + videoTitle + Constants.FAVORITE_ERROR1;
+                    return Constants.ERROR + currentCommand.getTitle()
+                            + Constants.FAVORITE_ERROR1;
                 }
             } else {
-                return Constants.ERROR + videoTitle + Constants.NOT_SEEN;
+                return Constants.ERROR + currentCommand.getTitle() + Constants.NOT_SEEN;
             }
         }
     }
 
     /**
-     * functia de video-uri vazute
-     * @param videoTitle
-     * @return
+     * Command to mark a show as viewed
      */
-    public final String addView(final String videoTitle) {
-        if (videoTitle == null) {
+    public final String addView(final ActionInputData currentCommand) {
+        if (currentCommand.getTitle() == null) {
             return null;
         } else {
-            if (history.containsKey(videoTitle)) {
-                history.replace(videoTitle, history.get(videoTitle) + 1);
-                return Constants.SUCCESS + videoTitle + Constants.VIEW_SUCCESS
-                        + history.get(videoTitle);
+            if (history.containsKey(currentCommand.getTitle())) {
+                history.replace(currentCommand.getTitle(),
+                        history.get(currentCommand.getTitle()) + 1);
+                return Constants.SUCCESS + currentCommand.getTitle()
+                        + Constants.VIEW_SUCCESS + history.get(currentCommand.getTitle());
             } else {
-                history.put(videoTitle, Constants.VIEW_CONST);
-                return Constants.SUCCESS + videoTitle + Constants.VIEW_SUCCESS
+                history.put(currentCommand.getTitle(), Constants.VIEW_CONST);
+                return Constants.SUCCESS + currentCommand.getTitle() + Constants.VIEW_SUCCESS
                         + Constants.VIEW_CONST;
             }
         }
     }
 
     /**
-     * @param movies
-     * @param serials
-     * @param videoTitle
-     * @param rating
-     * @param season
-     * @return
+     * Command to add rating to a show
      */
-    public final String addRating(final ArrayList<Movie> movies, final ArrayList<Serial> serials,
-                                  final String videoTitle, final double rating,
-                                  final int season) {
-        if (videoTitle == null) {
+    public final String addRating(final ActionInputData currCommand,
+                                  final ArrayList<Movie> movies,
+                                  final ArrayList<Serial> serials) {
+        if (currCommand.getTitle() == null) {
             return null;
         } else {
-            if (history.containsKey(videoTitle)) {
+            if (history.containsKey(currCommand.getTitle())) {
                 for (Movie movie : movies) {
-                    if (movie.getTitle().equals(videoTitle)) {
+                    if (movie.getTitle().equals(currCommand.getTitle())) {
+                        // rate a movie only if it's not already rated
                         if (ratingMovie.get(movie.getTitle()) == null) {
                             ratingMovie.put(movie.getTitle(), movie.getRating());
-                            movie.setRating(rating);
+                            movie.setRating(currCommand.getGrade());
                             numberRatings++;
-                            return Constants.SUCCESS + videoTitle + Constants.RATED
-                                    + rating + Constants.BY + username;
+                            return Constants.SUCCESS + currCommand.getTitle() + Constants.RATED
+                                    + currCommand.getGrade() + Constants.BY + username;
                         } else {
-                            return Constants.ERROR + videoTitle + Constants.AL_RATED;
+                            return Constants.ERROR + currCommand.getTitle() + Constants.AL_RATED;
                         }
                     }
                 }
                 for (Serial serial : serials) {
-                    if (serial.getTitle().equals(videoTitle)) {
-                        ratingSerial.computeIfAbsent(videoTitle, k -> new ArrayList<>());
-                        if (ratingSerial.get(videoTitle).contains(season)) {
-                            return Constants.ERROR + videoTitle + Constants.AL_RATED;
+                    if (serial.getTitle().equals(currCommand.getTitle())) {
+                        // rate a serial only if it's not already rated
+                        ratingSerial.computeIfAbsent(currCommand.getTitle(),
+                                k -> new ArrayList<>());
+
+                        if (ratingSerial.get(currCommand.getTitle()).
+                                contains(currCommand.getSeasonNumber())) {
+                            return Constants.ERROR + currCommand.getTitle()
+                                    + Constants.AL_RATED;
+
                         } else {
-                            ArrayList<Integer> seasonBuff = ratingSerial.get(videoTitle);
-                            seasonBuff.add(season);
-                            ratingSerial.put(videoTitle, seasonBuff);
-                            serial.getSeasons().get(season - 1).getRatings().add(rating);
+                            ArrayList<Integer> seasonBuff =
+                                    ratingSerial.get(currCommand.getTitle());
+                            seasonBuff.add(currCommand.getSeasonNumber());
+                            // populate the hashmap
+                            ratingSerial.put(currCommand.getTitle(), seasonBuff);
+                            serial.getSeasons().get(currCommand.getSeasonNumber() - 1).
+                                    getRatings().add(currCommand.getGrade());
                             numberRatings++;
-                            return Constants.SUCCESS + videoTitle + Constants.RATED + rating
+                            return Constants.SUCCESS + currCommand.getTitle()
+                                    + Constants.RATED + currCommand.getGrade()
                                     + Constants.BY + username;
                         }
                     }
                 }
             } else {
-                return Constants.ERROR + videoTitle + Constants.NOT_SEEN;
+                return Constants.ERROR + currCommand.getTitle() + Constants.NOT_SEEN;
             }
         }
-        return Constants.ERROR + videoTitle + Constants.NOT_SEEN;
+        return Constants.ERROR + currCommand.getTitle() + Constants.NOT_SEEN;
     }
 
     /**
-     * @param sortType
-     * @param number
-     * @param users
-     * @return
+     * Function to sort first N users by their number of ratings
      */
-    public static String ratingsNumber(final String sortType, final int number,
+    public static String ratingsNumber(final ActionInputData currCommand,
                                        final ArrayList<User> users) {
         ArrayList<User> usersBuff = new ArrayList<>();
         ArrayList<String> usernames = new ArrayList<>();
 
-        for (int i = 0, j = 0; i < users.size(); i++) {
-            if (users.get(i).getNumberRatings() != 0) {
-                usersBuff.add(users.get(i));
+        // populate the users' arraylist
+        for (User user : users) {
+            if (user.getNumberRatings() != 0) {
+                usersBuff.add(user);
             }
         }
 
+        // sort the arraylist
         usersBuff.sort(getcompByUser());
-        if ((sortType.equals(Constants.DSC))) {
+        if ((currCommand.getSortType().equals(Constants.DSC))) {
             Collections.reverse(usersBuff);
         }
-        for(int j = 0; j < number && j < usersBuff.size(); j++) {
+
+        // selecting first N users
+        for (int j = 0; j < currCommand.getNumber() && j < usersBuff.size(); j++) {
             usernames.add(usersBuff.get(j).getUsername());
         }
         return Constants.QUERY_RES + usernames;
     }
 
     /**
-     * @param movies
-     * @param serials
-     * @return
+     * Function to determine first unseen video from data base
      */
     public String standardUser(final ArrayList<Movie> movies,
                                final ArrayList<Serial> serials) {
 
         for (Movie movie : movies) {
+            // verify if a movie isn't in user's history
             if (!history.containsKey(movie.getTitle())) {
                 return Constants.STANDARD_SUCCESS + movie.getTitle();
             }
         }
         for (Serial serial : serials) {
+            // verify if a serial isn't in user's history
             if (!history.containsKey(serial.getTitle())) {
                 return Constants.STANDARD_SUCCESS + serial.getTitle();
             }
@@ -309,30 +303,38 @@ public class User {
     }
 
     /**
-     * @param movies
-     * @param serials
-     * @return
+     * Function to determine best video unseen by a user
      */
     public String bestUnseen(final ArrayList<Movie> movies, final ArrayList<Serial> serials) {
+
+        // hashmap that contains shows' name and rating
         HashMap<String, Double> ratingShow = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<Serial> serialBuff = new ArrayList<>(serials);
 
+        // populate the hashmap with movies
         for (Movie movie : moviesBuff) {
             ratingShow.put(movie.getTitle(), movie.getRating());
         }
+
+        // sort the hashmap after rating
         moviesBuff.sort(getCompByDoubleMovie(ratingShow, movies));
         for (Movie movie : moviesBuff) {
+            // verify if the best movie isn't in user's history
             if (!history.containsKey(movie.getTitle())) {
                 return Constants.STANDARD_BEST_UNSEEN_SUCCESS + movie.getTitle();
             }
         }
 
+        // populate the hashmap with serials
         for (Serial serial : serialBuff) {
             ratingShow.put(serial.getTitle(), serial.getSerialRating());
         }
+
+        // sort the hashmap after rating
         serialBuff.sort(getCompByDoubleSerial(ratingShow, serials));
         for (Serial serial : serialBuff) {
+            // verify if the best serial isn't in user's history
             if (!history.containsKey(serial.getTitle())) {
                 return Constants.STANDARD_BEST_UNSEEN_SUCCESS + serial.getTitle();
             }
@@ -341,19 +343,19 @@ public class User {
     }
 
     /**
-     * @param currentCommand
-     * @param movies
-     * @param serials
-     * @return
+     * Function to determine all shows from a specific genre
      */
     public String searchPremium(final ActionInputData currentCommand,
                                 final ArrayList<Movie> movies,
                                 final ArrayList<Serial> serials) {
+
+        // hashmap that contains shows' name and rating
         HashMap<String, Double> ratingShow = new HashMap<>();
         ArrayList<Movie> moviesBuff = new ArrayList<>(movies);
         ArrayList<Serial> serialBuff = new ArrayList<>(serials);
         ArrayList<Show> showBuff = new ArrayList<>();
 
+        // populate the hashmap
         for (Movie movie : moviesBuff) {
             ratingShow.put(movie.getTitle(), movie.getRating());
         }
@@ -364,10 +366,14 @@ public class User {
         showBuff.addAll(movies);
         showBuff.addAll(serials);
 
+        // remove show if it doesn't have the input genre and if it's in users' history
         showBuff.removeIf(show -> !show.getGenres().contains(currentCommand.getGenre())
                 || history.containsKey(show.getTitle()));
 
+        // sort the hashmap
         showBuff.sort(getCompByDoubleShow(ratingShow));
+
+        // check if the user is premium
         if (subscriptionType.equals(Constants.PREMIUM) && showBuff.size() > 0) {
             return Constants.SEARCH_SUCCESS + showBuff.toString();
         }
@@ -375,19 +381,16 @@ public class User {
     }
 
     /**
-     * @param currentCommand
-     * @param movies
-     * @param serials
-     * @param users
-     * @return
+     * Function to determine the most common video in the favorites list
+     * unseen by the user
      */
-    public String favoritePremium(final ActionInputData currentCommand,
-                                  final ArrayList<Movie> movies,
-                                  final ArrayList<Serial> serials, final ArrayList<User> users) {
+    public String favoritePremium(final ArrayList<Movie> movies,
+                                  final ArrayList<Serial> serials,
+                                  final ArrayList<User> users) {
 
+        // hashmap that contains shows' name and number of favorite
         HashMap<String, Integer> favoriteShows = new HashMap<>();
         ArrayList<Show> showBuff = new ArrayList<>();
-        //ArrayList<String> showList = new ArrayList<>();
 
         showBuff.addAll(movies);
         showBuff.addAll(serials);
@@ -397,6 +400,7 @@ public class User {
             favoriteShows.put(show.getTitle(), 0);
         }
 
+        // populate the hashmap
         for (User user : users) {
             for (String title : user.getFavoriteShows()) {
                 if (favoriteShows.containsKey(title)) {
@@ -407,9 +411,13 @@ public class User {
             }
         }
 
+        // sort the hashmap
         showBuff.sort(getCompByInt(favoriteShows, showBuff2));
+
+        // remove show is seen by the user
         showBuff.removeIf(show -> history.containsKey(show.getTitle()));
 
+        // check if the user is premium
         if (subscriptionType.equals(Constants.PREMIUM) && showBuff.size() > 0) {
             return Constants.FAV_SUCCESS + showBuff.get(0).getTitle();
         }
@@ -417,17 +425,22 @@ public class User {
         return Constants.FAVORITE_ERROR;
     }
 
+    /**
+     * Function to determine the most popular video by genre that is not seen
+     */
     public String popularPremium(final ActionInputData currentCommand,
                                  final ArrayList<Movie> movies,
                                  final ArrayList<Serial> serials,
                                  final ArrayList<User> users) {
 
+        // hashmap that contains the genre and its number of views
         HashMap<String, Integer> popularGenre = new HashMap<>();
+        // hashmap that contains name of the show and Show object
         HashMap<String, Show> linkShow = new HashMap<>();
+        // hashmap that contains name of the show and list of genres
         HashMap<String, ArrayList<String>> genreShow = new HashMap<>();
         ArrayList<Show> showBuff = new ArrayList<>();
         ArrayList<String> genres = new ArrayList<>();
-
 
         showBuff.addAll(movies);
         showBuff.addAll(serials);
@@ -436,22 +449,24 @@ public class User {
             linkShow.put(show.getTitle(), show);
         }
 
-        for(Show show : showBuff) {
-            for(String genre : show.getGenres()) {
+        // populate the genre hashmap
+        for (Show show : showBuff) {
+            for (String genre : show.getGenres()) {
                 if (genreShow.containsKey(genre)) {
-                        genreShow.get(genre).add(show.getTitle());
-                    } else {
-                        genres.add(genre);
-                        genreShow.put(genre, new ArrayList<>());
-                        genreShow.get(genre).add(show.getTitle());
-                    }
+                    genreShow.get(genre).add(show.getTitle());
+                } else {
+                    genres.add(genre);
+                    genreShow.put(genre, new ArrayList<>());
+                    genreShow.get(genre).add(show.getTitle());
+                }
             }
         }
 
+        // populate the most popular genre hashmap
         for (User user : users) {
-            for(Map.Entry<String, Integer> entry : user.getHistory().entrySet()) {
-                for(String genre : linkShow.get(entry.getKey()).getGenres()) {
-                    if(popularGenre.containsKey(genre)) {
+            for (Map.Entry<String, Integer> entry : user.getHistory().entrySet()) {
+                for (String genre : linkShow.get(entry.getKey()).getGenres()) {
+                    if (popularGenre.containsKey(genre)) {
                         popularGenre.put(genre, popularGenre.get(genre) + entry.getValue());
                     } else {
                         popularGenre.put(genre, entry.getValue());
@@ -460,13 +475,15 @@ public class User {
             }
         }
 
+        // sort the hashmap
         genres.sort(getCompByIntFav(popularGenre));
 
-        for(User user : users) {
-            if(currentCommand.getUsername().equals(user.getUsername())) {
-                if(user.subscriptionType.equals(Constants.PREMIUM)) {
-                    for(String genre : genres) {
-                        for(String show : genreShow.get(genre)) {
+        for (User user : users) {
+            if (currentCommand.getUsername().equals(user.getUsername())) {
+                // verify if a user is premium
+                if (user.subscriptionType.equals(Constants.PREMIUM)) {
+                    for (String genre : genres) {
+                        for (String show : genreShow.get(genre)) {
                             if (!user.getHistory().containsKey(show)) {
                                 return Constants.POPULAR_SUCCES + show;
                             }
