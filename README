@@ -1,0 +1,143 @@
+# Voicu Ana-Nicoleta 322CA
+
+---- Metoda de implementare ----
+
+    Implementarea consta in crearea unor clase specifice utilizatorilor,
+show-urilor, filmelor, serialelor si actorilor. Filmele si serialele mostenesc
+show-urile, in fiecare clasa avem metodele specifice fiecarei actiuni, iar in
+main generam bazele de date pentru useri, filme si seriale, apoi parcugem
+actiunile. Pentru comenzi si recomandari verificam userii si pentru query-uri
+verificam daca primim filme sau seriale.
+
+---- Comenzi ----
+
+* Favorite
+
+    Metoda este implementata in clasa User, primeste numele show-ului,
+verifica daca se afla in istoricul user-ului si nu a fost adaugat deja la
+favorite si il adauga.
+
+* View
+
+    Metoda este implementata in clasa User, primeste numele show-ului,
+verifica daca se afla in istoricul user-ului si daca da, incrementeaza
+numarul de vizualizari. Daca nu se afla deja, il adauga.
+
+* Rating
+
+    Metoda este implementata in clasa User, in care verificam daca show-ul
+se afla in istoricul user-ului, apoi daca este film ii luam rating-ul din
+baza de date si tinem minte de fiecare data cand un user da rating, iar daca
+este serial il calculam pentru fiecare sezon si memoram numarul de rating-uri.
+
+---- Query-uri ----
+
+* Average
+
+    Metoda este implementata in clasa Actor, unde calculam rating-urile pentru
+fiecare show, apoi verificam daca show-ul se afla in filmografia actorului
+si calculam media, ignorand rating-ul diferit de 0. La sfarsit sortam actorii
+intai dupa ratings apoi dupa nume si ii selectam pe primii N.
+
+* Awards
+
+    Medota este implementata in clasa Actor, unde nu luam in calcul actorii
+care nu au un anumit premiu, apoi ii sortam intai dupa numarul de premii, al
+doilea criteriu fiind numele actorilor.
+
+* Filter description
+
+    Metoda este implementata in clasa Actor, unde nu luam in calcul actorii
+care nu au un anumit keyword in descriere, folosind un regex si transformand
+tot textul in lowercase. Sortam actorii dupa numele lor, in ordinea din input.
+
+* Rating
+
+    Verificam in main daca show-ul este serial sau film, iar pentru film metoda
+este implementata in clasa Movies, iar pentru serial este implementata metoda
+in clasa Serials.
+    Pentru filme, luam rating-ul din baza de date, apoi le filtram dupa anul si
+genul primite ca input, iar la sfarsit sortam intai dupa rating si apoi
+dupa nume si selectam primele N filme.
+    Pentru seriale, apelam metoda care calculeaza rating-ul si in functie de
+sezoane, apoi filtram dupa anul si genul primite ca input, iar la sfarsit
+sortam intai dupa rating si apoi dupa nume si selectam primele N filme.
+
+* Favorite
+
+    Verificam in main daca show-ul este serial sau film, iar pentru film metoda
+este implementata in clasa Movies, iar pentru serial este implementata metoda
+in clasa Serials.
+    Pentru filme si pentru seriale verificam de cate ori apar in listele de
+filme/seriale favorite ale utilizatorilor, apoi filtram filmele si serialele
+dupa anul si genul primite in input, sortandu-le dupa numarul de favorite,
+apoi dupa nume. La sfarsit selectam primele N filme/seriale.
+
+* Longest
+
+    Verificam in main daca show-ul este serial sau film, iar pentru film metoda
+este implementata in clasa Movies, iar pentru serial este implementata metoda
+in clasa Serials.
+    Filtram filemele si serialele dupa anul si genul primite in input, apoi le
+sortam dupa durata lor, la seriale calculand suma duratelor sezoanelor. La
+sfarsit selectam primele N filme/seriale.
+
+* Most viewed
+
+    Verificam in main daca show-ul este serial sau film, iar pentru film metoda
+este implementata in clasa Movies, iar pentru serial este implementata metoda
+in clasa Serials.
+    Filtram filemele si serialele dupa anul si genul primite in input, apoi le
+sortam dupa numarul de vizioari. La sfarsit selectam primele N filme/seriale.
+
+* Number of ratings
+
+    Metoda este implementata in clasa User, unde sortam utilizatorii in functie
+de numarul de rating-uri, apoi ii selectam pe primii N.
+
+---- Recomandari ----
+
+* Standard
+
+    Metoda este implementata in clasa User, unde verificam intai daca un film
+nu se afla in istoricul utilizatorului si daca nu se afla il returnam, apoi
+verificam serialele si returnam primul serial care nu a fost vazut.
+
+* Best Unseen
+
+    Metoda este implementata in clasa User, unde sortam intai filmele
+descrescator dupa rating si verificam daca nu a fost vazut pentru a il
+putea returna, apoi verificam serialele si intoarcem primul serial nevazut.
+
+* Popular
+
+    Metoda este implementata in clasa User, unde calculam cel mai popular gen
+dupa numarul de vizionari, apoi sortam show-urile, verificam daca user-ul are
+abonament de tip premium si returnam cel mai popular show nevazut.
+
+* Favorite
+
+    Metoda este implementata in clasa User, unde sortam show-urile dupa numarul
+de aparitie in lista de favorite, apoi dupa ordinea lor din baza de date.
+Ignoram show-urile care nu au fost vazute de user si verificam abonamentul sa fie
+de tip premium, la sfarsit returnand show-ul cel mai preferat nevazut de user.
+
+* Search
+
+    Metoda este implementata in clasa User, unde sortam show-urile dupa rating
+si ignoram show-urile care nu au un anumit gen si sunt vizionate de un anumit
+user. La sfarsit verficam abonamentul sa fie de tip premium si returnam
+show-urile.
+
+---- Link Github ----
+
+https://github.com/AnaMeov/Tema-POO-2020
+
+
+
+
+
+
+
+
+
